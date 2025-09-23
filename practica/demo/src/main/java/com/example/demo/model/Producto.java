@@ -21,7 +21,6 @@ public class Producto {
     @Column(name = "id_producto")
     private Long id_producto;
     @Column(name = "stock")
-
     private int stock;
 
     public Producto(Long id, String nombre, Long id_producto, int stock) {

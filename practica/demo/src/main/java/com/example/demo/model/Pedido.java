@@ -22,7 +22,7 @@ public class Pedido {
     private LocalDate fecha;
 
     @Column(name = "cantidad")
-    private int cantidad_productos;
+    private int cantidad_producto;
 
     @Column(name = "id_producto")
     private Long idProducto;
@@ -34,7 +34,7 @@ public class Pedido {
     public Pedido(Long nroPedido, LocalDate fecha, int cantidad, Long idProducto, Long idRevendedor) {
         this.nroPedido = nroPedido;
         this.fecha = fecha;
-        this.cantidad_productos = cantidad;
+        this.cantidad_producto = cantidad;
         this.idProducto = idProducto;
         this.idRevendedor = idRevendedor;
     }
@@ -61,11 +61,11 @@ public class Pedido {
     }
 
      public int getCantidad_productos() {
-        return cantidad_productos;
+        return cantidad_producto;
     }
 
-    public void setCantidad_productos(int cantidad_productos) {
-        this.cantidad_productos = cantidad_productos;
+    public void setCantidad_productos(int cantidad_producto) {
+        this.cantidad_producto = cantidad_producto;
     }
 
     public Long getIdProducto() {
@@ -89,7 +89,7 @@ public class Pedido {
         return "Pedido{" +
                 "nroPedido=" + nroPedido +
                 ", fecha=" + fecha +
-                ", cantidad=" + cantidad_productos +
+                ", cantidad=" + cantidad_producto +
                 ", idProducto=" + idProducto +
                 ", idRevendedor=" + idRevendedor +
                 '}';
