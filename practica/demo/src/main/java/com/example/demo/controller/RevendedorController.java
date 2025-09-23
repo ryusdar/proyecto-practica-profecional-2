@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import com.example.demo.dao.RevendedorDao;
 import com.example.demo.model.Revendedor;
 @RestController
@@ -18,17 +17,17 @@ public class RevendedorController {
       @Autowired
     private RevendedorDao revendedorDao;
 
-    @GetMapping("api/producto")
+    @GetMapping("api/revendedor")
     public List<Revendedor> getProducto() {
         return revendedorDao.findAll();
     }
 
-    @PostMapping("api/producto")
+    @PostMapping("api/revendedor")
     public void registrar(@RequestBody Revendedor revendedor) {
         revendedorDao.save(revendedor);
     }
 
-    @DeleteMapping("api/producto/{id}")
+    @DeleteMapping("api/revendedor/{id}")
     public void eliminar(@PathVariable Long id) {
         revendedorDao.deleteById(id);
     }

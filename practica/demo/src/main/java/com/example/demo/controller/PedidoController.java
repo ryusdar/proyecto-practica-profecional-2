@@ -18,17 +18,17 @@ public class PedidoController {
       @Autowired
     private PedidoDao pedidoDao;
 
-    @GetMapping("api/producto")
+    @GetMapping("api/pedido")
     public List<Pedido> getpedido() {
         return pedidoDao.findAll();
     }
 
-    @PostMapping("api/producto")
+    @PostMapping("api/pedido")
     public void registrar(@RequestBody Pedido pedido) {
        pedidoDao.save(pedido);
     }
 
-    @DeleteMapping("api/producto/{id}")
+    @DeleteMapping("api/pedido/{id}")
     public void eliminar(@PathVariable Long id) {
         pedidoDao.deleteById(id);
     }
