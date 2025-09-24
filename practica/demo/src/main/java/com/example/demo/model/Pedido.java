@@ -21,8 +21,8 @@ public class Pedido {
     @Column(name = "fecha")
     private LocalDate fecha;
 
-    @Column(name = "cantidad")
-    private int cantidad_producto;
+    @Column(name = "cantidad_productos")
+    private Integer cantidad_productos;
 
     @Column(name = "id_producto")
     private Long idProducto;
@@ -31,10 +31,10 @@ public class Pedido {
     private Long idRevendedor;
 
     // Constructor con parámetros
-    public Pedido(Long nroPedido, LocalDate fecha, int cantidad, Long idProducto, Long idRevendedor) {
+    public Pedido(Long nroPedido, LocalDate fecha, Integer cantidad_productos, Long idProducto, Long idRevendedor) {
         this.nroPedido = nroPedido;
         this.fecha = fecha;
-        this.cantidad_producto = cantidad;
+        this.cantidad_productos = cantidad_productos;
         this.idProducto = idProducto;
         this.idRevendedor = idRevendedor;
     }
@@ -60,12 +60,12 @@ public class Pedido {
         this.fecha = fecha;
     }
 
-     public int getCantidad_productos() {
-        return cantidad_producto;
+     public Integer getCantidad_productos() {
+        return cantidad_productos;
     }
 
-    public void setCantidad_productos(int cantidad_producto) {
-        this.cantidad_producto = cantidad_producto;
+    public void setCantidad_productos(Integer cantidad_productos) {
+        this.cantidad_productos = cantidad_productos;
     }
 
     public Long getIdProducto() {
@@ -89,7 +89,7 @@ public class Pedido {
         return "Pedido{" +
                 "nroPedido=" + nroPedido +
                 ", fecha=" + fecha +
-                ", cantidad=" + cantidad_producto +
+                ", cantidad_productos=" + cantidad_productos +
                 ", idProducto=" + idProducto +
                 ", idRevendedor=" + idRevendedor +
                 '}';
