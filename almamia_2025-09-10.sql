@@ -1,0 +1,1 @@
+SELECT * FROM almamia2.revendedor;
