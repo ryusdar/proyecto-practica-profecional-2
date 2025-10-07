@@ -21,7 +21,7 @@ public class Pedido {
     @Column(name = "fecha")
     private LocalDate fecha;
 
-    @Column(name = "cantidad_productos")
+    @Column(name = "cantidad_producto")
     private Integer cantidad_productos;
 
     @Column(name = "id_producto")
