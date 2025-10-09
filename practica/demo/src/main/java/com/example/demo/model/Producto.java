@@ -13,32 +13,32 @@ public class Producto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id_producto;
 
     @Column(name = "nombre")
     private String nombre;
 
-    @Column(name = "id_producto")
-    private Long id_producto;
     @Column(name = "stock")
     private int stock;
+    @Column(name = "id_categoria")
+    private int id_categoria;
 
-    public Producto(Long id, String nombre, Long id_producto, int stock) {
-        this.id = id;
+    public Producto( String nombre, Long id_producto, int stock, int id_categoria) {
         this.nombre = nombre;
         this.id_producto = id_producto;
         this.stock = stock;
+        this.id_categoria = id_categoria;
     }
+
+        public int getId_categoria() {
+            return id_categoria;
+        }
+
+         public void setId_categoria(int id_categoria) {
+        this.id_categoria = id_categoria;
+        }
 
     public Producto() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getNombre() {
@@ -69,11 +69,16 @@ public class Producto {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Producto{");
-        sb.append("id=").append(id);
         sb.append(", nombre=").append(nombre);
         sb.append(", id_producto=").append(id_producto);
+        sb.append(", stock=").append(stock);
+        sb.append(", id_categoria=").append(id_categoria);
         sb.append('}');
         return sb.toString();
     }
+
+    
+
+    
 
 }

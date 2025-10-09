@@ -18,7 +18,8 @@ import com.example.demo.model.Pedido;
 @RestController
 @RequestMapping("/api/pedido")
 public class PedidoController {
-      @Autowired
+
+    @Autowired
     private PedidoDao pedidoDao;
 
     @GetMapping
@@ -26,14 +27,14 @@ public class PedidoController {
         return pedidoDao.findAll();
     }
 
-     @GetMapping("/buscar")
+    @GetMapping("/buscar")
     public List<Pedido> buscar(@RequestParam Long nroPedido) {
         return pedidoDao.findByNroPedido(nroPedido);
     }
 
     @PostMapping
     public void registrar(@RequestBody Pedido pedido) {
-       pedidoDao.save(pedido);
+        pedidoDao.save(pedido);
     }
 
     @DeleteMapping("{id}")

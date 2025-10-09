@@ -2,6 +2,8 @@ package com.example.demo.model;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,12 +19,13 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "nro_pedido")
     private Long nroPedido;
-
+    
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "fecha")
     private LocalDate fecha;
 
     @Column(name = "cantidad_producto")
-    private Integer cantidad_productos;
+    private Integer cantidad_producto;
 
     @Column(name = "id_producto")
     private Long idProducto;
@@ -31,10 +34,10 @@ public class Pedido {
     private Long idRevendedor;
 
     // Constructor con parámetros
-    public Pedido(Long nroPedido, LocalDate fecha, Integer cantidad_productos, Long idProducto, Long idRevendedor) {
+    public Pedido(Long nroPedido, LocalDate fecha, Integer cantidad_producto, Long idProducto, Long idRevendedor) {
         this.nroPedido = nroPedido;
         this.fecha = fecha;
-        this.cantidad_productos = cantidad_productos;
+        this.cantidad_producto = cantidad_producto;
         this.idProducto = idProducto;
         this.idRevendedor = idRevendedor;
     }
@@ -60,12 +63,12 @@ public class Pedido {
         this.fecha = fecha;
     }
 
-     public Integer getCantidad_productos() {
-        return cantidad_productos;
+     public Integer getCantidad_producto() {
+        return cantidad_producto;
     }
 
-    public void setCantidad_productos(Integer cantidad_productos) {
-        this.cantidad_productos = cantidad_productos;
+    public void setCantidad_producto(Integer cantidad_producto) {
+        this.cantidad_producto = cantidad_producto;
     }
 
     public Long getIdProducto() {
@@ -89,7 +92,7 @@ public class Pedido {
         return "Pedido{" +
                 "nroPedido=" + nroPedido +
                 ", fecha=" + fecha +
-                ", cantidad_productos=" + cantidad_productos +
+                ", cantidad_productos=" + cantidad_producto +
                 ", idProducto=" + idProducto +
                 ", idRevendedor=" + idRevendedor +
                 '}';

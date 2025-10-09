@@ -1,3 +1,8 @@
+$(document).ready(function() {
+  console.log("DOM cargado");
+  console.log("Botón encontrado:", $("#pedido").length);
+});
+
 const preciosProductos = {
   "Shampoo Sólido": 2500,
   "Acondicionador": 2700,
@@ -6,7 +11,6 @@ const preciosProductos = {
   "Perfume Vegano": 4100,
 };
 
-// Inicializar Select2
 function inicializarSelect2() {
   $(".producto").select2({
     placeholder: "Buscar producto...",
@@ -15,7 +19,6 @@ function inicializarSelect2() {
   });
 }
 
-// Actualizar totales individuales y total general
 function actualizarTotales() {
   let totalGeneral = 0;
   $("#tablaPedido tbody tr").each(function () {
@@ -28,7 +31,6 @@ function actualizarTotales() {
   $("#totalGeneral").text(totalGeneral.toFixed(2));
 }
 
-// Cambio de producto
 $(document).on("change", ".producto", function () {
   const producto = $(this).val();
   const precio = preciosProductos[producto] || 0;
@@ -36,12 +38,10 @@ $(document).on("change", ".producto", function () {
   actualizarTotales();
 });
 
-// Cambio de cantidad
 $(document).on("input", ".cantidad", function () {
   actualizarTotales();
 });
 
-// Agregar fila
 $("#agregarFila").on("click", function () {
   const nuevaFila = `
     <tr>
@@ -64,18 +64,55 @@ $("#agregarFila").on("click", function () {
   inicializarSelect2();
 });
 
-// Eliminar fila
 $(document).on("click", ".eliminar", function () {
   $(this).closest("tr").remove();
   actualizarTotales();
 });
 
-// Guardar pedido
-$("#guardarPedido").on("click", function () {
-  alert("Pedido guardado correctamente ✅");
+$("#pedido").on("click", async function (e) {
+  e.preventDefault();
+
+  let items = [];
+  $("#tablaPedido tbody tr").each(function () {
+    const producto = $(this).find(".producto").val();
+    const cantidad = parseInt($(this).find(".cantidad").val()) || 0;
+    const precio = parseFloat($(this).find(".precio").val()) || 0;
+    if (producto && cantidad > 0) {
+      items.push({
+        nombreProducto: producto,
+        cantidad: cantidad,
+        precioUnitario: precio
+      });
+    }
+  });
+
+  if (items.length === 0) {
+    alert("⚠️ No hay productos en el pedido");
+    return;
+  }
+
+
+  try {
+    const response = await fetch("/api/pedido", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(pedido),
+    });
+
+    if (response.ok) {
+      alert("✅ Pedido guardado correctamente en la base de datos");
+      $("#tablaPedido tbody").empty();
+      actualizarTotales();
+    } else {
+      alert("⚠️ Error al guardar el pedido");
+      console.log(await response.text());
+    }
+  } catch (error) {
+    console.error("Error al enviar pedido:", error);
+    alert("❌ Error de conexión con el servidor");
+  }
 });
 
-// Inicializar Select2 al cargar
 $(document).ready(function () {
   inicializarSelect2();
   actualizarTotales();
