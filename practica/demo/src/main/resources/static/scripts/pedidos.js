@@ -91,9 +91,13 @@ $("#pedido").on("click", async function (e) {
     return;
   }
 
+  // Crear el objeto pedido con la estructura correcta
+  const pedido = {
+    pedido: items
+  };
 
   try {
-    const response = await fetch("/api/pedido", {
+    const response = await fetch("api/pedido", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(pedido),
