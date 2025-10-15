@@ -13,28 +13,28 @@ public class Provincia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_provincia")
-    private Long idProvincia;
+    private int  idProvincia;
 
     @Column(name = "nombre")
     private String nombre;
 
     @Column(name = "id_pais")
-    private Long idPais;
+    private int  idPais;
 
     public Provincia() {
     }
 
-    public Provincia(Long idPais, Long idProvincia, String nombre) {
+    public Provincia(int  idPais, int idProvincia, String nombre) {
         this.idPais = idPais;
         this.idProvincia = idProvincia;
         this.nombre = nombre;
     }
 
-    public Long getIdProvincia() {
+    public int  getIdProvincia() {
         return idProvincia;
     }
 
-    public void setIdProvincia(Long idProvincia) {
+    public void setIdProvincia(int  idProvincia) {
         this.idProvincia = idProvincia;
     }
 
@@ -46,11 +46,11 @@ public class Provincia {
         this.nombre = nombre;
     }
 
-    public Long getIdPais() {
+    public int  getIdPais() {
         return idPais;
     }
 
-    public void setIdPais(Long idPais) {
+    public void setIdPais( int idPais) {
         this.idPais = idPais;
     }
 

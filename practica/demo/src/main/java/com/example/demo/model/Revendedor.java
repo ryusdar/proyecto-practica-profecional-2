@@ -13,7 +13,7 @@ public class Revendedor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_revendedor")
-    private Long idRevendedor;
+    private int idRevendedor;
 
     @Column(name = "nombre")
     private String nombre;
@@ -22,7 +22,7 @@ public class Revendedor {
     private String apellido;
 
     @Column(name = "id_domicilio")
-    private Long idDomicilio;
+    private int idDomicilio;
 
     @Column(name = "telefono")
     private String telefono;
@@ -30,7 +30,7 @@ public class Revendedor {
     public Revendedor() {
     }
 
-    public Revendedor(Long idRevendedor, String nombre, String apellido, Long idDomicilio, String telefono) {
+    public Revendedor(int idRevendedor, String nombre, String apellido, int idDomicilio, String telefono) {
         this.idRevendedor = idRevendedor;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -38,11 +38,11 @@ public class Revendedor {
         this.telefono = telefono;
     }
 
-    public Long getIdRevendedor() {
+    public int getIdRevendedor() {
         return idRevendedor;
     }
 
-    public void setIdRevendedor(Long idRevendedor) {
+    public void setIdRevendedor(int idRevendedor) {
         this.idRevendedor = idRevendedor;
     }
 
@@ -62,11 +62,11 @@ public class Revendedor {
         this.apellido = apellido;
     }
 
-    public Long getIdDomicilio() {
+    public int getIdDomicilio() {
         return idDomicilio;
     }
 
-    public void setIdDomicilio(Long idDomicilio) {
+    public void setIdDomicilio(int idDomicilio) {
         this.idDomicilio = idDomicilio;
     }
 

@@ -18,7 +18,7 @@ public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "nro_pedido")
-    private Long nroPedido;
+    private int nroPedido;
     
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "fecha")
@@ -28,13 +28,13 @@ public class Pedido {
     private Integer cantidad_producto;
 
     @Column(name = "id_producto")
-    private Long idProducto;
+    private int idProducto;
 
     @Column(name = "id_revendedor")
-    private Long idRevendedor;
+    private int idRevendedor;
 
     // Constructor con parámetros
-    public Pedido(Long nroPedido, LocalDate fecha, Integer cantidad_producto, Long idProducto, Long idRevendedor) {
+    public Pedido(int nroPedido, LocalDate fecha, Integer cantidad_producto, int idProducto, int idRevendedor) {
         this.nroPedido = nroPedido;
         this.fecha = fecha;
         this.cantidad_producto = cantidad_producto;
@@ -47,11 +47,11 @@ public class Pedido {
     }
 
     // Getters y setters
-    public Long getNroPedido() {
+    public int getNroPedido() {
         return nroPedido;
     }
 
-    public void setNroPedido(Long nroPedido) {
+    public void setNroPedido(int nroPedido) {
         this.nroPedido = nroPedido;
     }
 
@@ -71,19 +71,19 @@ public class Pedido {
         this.cantidad_producto = cantidad_producto;
     }
 
-    public Long getIdProducto() {
+    public int getIdProducto() {
         return idProducto;
     }
 
-    public void setIdProducto(Long idProducto) {
+    public void setIdProducto(int idProducto) {
         this.idProducto = idProducto;
     }
 
-    public Long getIdRevendedor() {
+    public int getIdRevendedor() {
         return idRevendedor;
     }
 
-    public void setIdRevendedor(Long idRevendedor) {
+    public void setIdRevendedor(int idRevendedor) {
         this.idRevendedor = idRevendedor;
     }
 

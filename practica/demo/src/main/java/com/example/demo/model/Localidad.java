@@ -12,28 +12,28 @@ public class Localidad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_localidad")
-    private Long idLocalidad;
+    private int  idLocalidad;
 
     @Column(name = "nombre")
     private String nombre;
 
     @Column(name = "id_provincia")
-    private Long idProvincia;
+    private int  idProvincia;
 
     public Localidad() {
     }
 
-    public Localidad(Long idLocalidad, Long idProvincia, String nombre) {
+    public Localidad(int  idLocalidad, int idProvincia, String nombre) {
         this.idLocalidad = idLocalidad;
         this.idProvincia = idProvincia;
         this.nombre = nombre;
     }
 
-    public Long getIdLocalidad() {
+    public int  getIdLocalidad() {
         return idLocalidad;
     }
 
-    public void setIdLocalidad(Long idLocalidad) {
+    public void setIdLocalidad(int  idLocalidad) {
         this.idLocalidad = idLocalidad;
     }
 
@@ -45,11 +45,11 @@ public class Localidad {
         this.nombre = nombre;
     }
 
-    public Long getIdProvincia() {
+    public int getIdProvincia() {
         return idProvincia;
     }
 
-    public void setIdProvincia(Long idProvincia) {
+    public void setIdProvincia(int idProvincia) {
         this.idProvincia = idProvincia;
     }
 

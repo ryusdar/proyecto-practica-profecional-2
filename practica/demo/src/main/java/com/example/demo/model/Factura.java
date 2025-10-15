@@ -1,5 +1,6 @@
 package com.example.demo.model;
 import java.time.LocalDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,12 +23,12 @@ public class Factura {
     private LocalDate fecha;
 
     @Column(name = "nro_pedido")
-    private Long nroPedido;
+    private int nroPedido;
    
     public Factura() {
     }
 
-    public Factura(LocalDate fecha, Long nroFactura, Long nroPedido, Long sucursal) {
+    public Factura(LocalDate fecha, Long nroFactura, int nroPedido, Long sucursal) {
         this.fecha = fecha;
         this.nroFactura = nroFactura;
         this.nroPedido = nroPedido;
@@ -58,11 +59,11 @@ public class Factura {
         this.fecha = fecha;
     }
 
-    public Long getNroPedido() {
+    public int getNroPedido() {
         return nroPedido;
     }
 
-    public void setNroPedido(Long nroPedido) {
+    public void setNroPedido(int nroPedido) {
         this.nroPedido = nroPedido;
     }
 

@@ -26,7 +26,7 @@ public class ProductoController {
         return productoDao.findAll();
     }
 
-    @PostMapping("api/pedido")
+    @PostMapping("api/producto")
     public void registrar(@RequestBody Producto producto) {
         productoDao.save(producto);
     }
