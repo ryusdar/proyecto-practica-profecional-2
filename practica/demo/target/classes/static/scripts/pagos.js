@@ -65,3 +65,8 @@ document.getElementById("formPago").addEventListener("submit", (e) => {
     alert(`Pago del pedido ${pedido} procesado ✅`);
     // Aquí podrías enviar los datos a tu servidor
 });
+
+document.getElementById("logout").addEventListener("click", () => {
+    localStorage.removeItem("usuario");
+    window.location.href = "../index.html";
+});

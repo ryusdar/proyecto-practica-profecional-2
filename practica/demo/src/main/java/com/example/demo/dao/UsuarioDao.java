@@ -5,4 +5,9 @@ import org.springframework.stereotype.Repository;
 import com.example.demo.model.Usuario;
 
 @Repository
-public interface UsuarioDao extends JpaRepository<Usuario, Long> {}
+public interface UsuarioDao extends JpaRepository<Usuario, Long> {
+    Usuario findByEmailAndContraseña(String email, String contraseña);
+
+}
+
+

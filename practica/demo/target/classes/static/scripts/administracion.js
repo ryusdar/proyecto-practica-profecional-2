@@ -80,3 +80,8 @@ $("#filterCantidadMin, #filterCantidadMax").on("input", filtrarStock);
         e.preventDefault();
         alert("Boleta generada correctamente ✅");
     });
+
+    document.getElementById("logout").addEventListener("click", () => {
+    localStorage.removeItem("usuario");
+    window.location.href = "../index.html";
+});

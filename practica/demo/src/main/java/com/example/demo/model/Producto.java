@@ -18,13 +18,17 @@ public class Producto {
     @Column(name = "nombre")
     private String nombre;
 
+    @Column(name = "precio")
+    private Double precio;
+
     @Column(name = "stock")
     private int stock;
     @Column(name = "id_categoria")
     private int id_categoria;
 
-    public Producto( String nombre, Long id_producto, int stock, int id_categoria) {
+    public Producto( String nombre, Double precio, Long id_producto, int stock, int id_categoria) {
         this.nombre = nombre;
+        this.precio = precio;
         this.id_producto = id_producto;
         this.stock = stock;
         this.id_categoria = id_categoria;
@@ -47,6 +51,14 @@ public class Producto {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+      public Double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(Double precio) {
+        this.precio = precio;
     }
 
     public Long getId_producto() {
