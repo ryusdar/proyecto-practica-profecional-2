@@ -32,7 +32,7 @@ public class ProductoController {
     }
 
     @DeleteMapping("api/producto/{id}")
-    public void eliminar(@PathVariable Long id) {
+    public void eliminar(@PathVariable int id) {
         productoDao.deleteById(id);
     }
 }

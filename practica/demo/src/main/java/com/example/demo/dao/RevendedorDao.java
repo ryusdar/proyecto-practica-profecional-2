@@ -8,6 +8,6 @@ import com.example.demo.model.Revendedor;
 
 
 @Repository
-public interface RevendedorDao extends JpaRepository<Revendedor, Long>  {
+public interface RevendedorDao extends JpaRepository<Revendedor, Integer>  {
 
 }

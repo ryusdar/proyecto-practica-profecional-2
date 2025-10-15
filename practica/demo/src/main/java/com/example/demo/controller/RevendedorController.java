@@ -28,7 +28,7 @@ public class RevendedorController {
     }
 
     @DeleteMapping("api/revendedor/{id}")
-    public void eliminar(@PathVariable Long id) {
+    public void eliminar(@PathVariable int id) {
         revendedorDao.deleteById(id);
     }
 }

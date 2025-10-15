@@ -28,7 +28,7 @@ public class PedidoController {
     }
 
     @GetMapping("/buscar")
-    public List<Pedido> buscar(@RequestParam Long nroPedido) {
+    public List<Pedido> buscar(@RequestParam int nroPedido) {
         return pedidoDao.findByNroPedido(nroPedido);
     }
 
@@ -38,7 +38,7 @@ public class PedidoController {
     }
 
     @DeleteMapping("{id}")
-    public void eliminar(@PathVariable Long id) {
+    public void eliminar(@PathVariable int id) {
         pedidoDao.deleteById(id);
     }
 }
