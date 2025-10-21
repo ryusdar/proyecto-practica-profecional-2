@@ -1,9 +1,6 @@
 package com.example.demo.model;
-
 import java.time.LocalDate;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,14 +15,14 @@ public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "nro_pedido")
-    private Long nroPedido;
-    
+    private Long nroPedido;  // ✅ Cambia a camelCase
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "fecha")
     private LocalDate fecha;
 
     @Column(name = "cantidad_producto")
-    private Integer cantidad_producto;
+    private Integer cantidadProducto;  // ✅ Cambia a camelCase
 
     @Column(name = "id_producto")
     private Long idProducto;
@@ -34,15 +31,15 @@ public class Pedido {
     private Long idRevendedor;
 
     // Constructor con parámetros
-    public Pedido(Long nroPedido, LocalDate fecha, Integer cantidad_producto, Long idProducto, Long idRevendedor) {
-        this.nroPedido = nroPedido;
+    public Pedido(Long nroPedido, LocalDate fecha, Integer cantidadProducto, Long idProducto, Long idRevendedor) {
+        this.nroPedido = nroPedido;  // ✅ Correcto
         this.fecha = fecha;
-        this.cantidad_producto = cantidad_producto;
+        this.cantidadProducto = cantidadProducto;  // ✅ Correcto
         this.idProducto = idProducto;
         this.idRevendedor = idRevendedor;
     }
 
-    // Constructor vacío (obligatorio para JPA)
+    // Constructor vacío
     public Pedido() {
     }
 
@@ -63,12 +60,12 @@ public class Pedido {
         this.fecha = fecha;
     }
 
-     public Integer getCantidad_producto() {
-        return cantidad_producto;
+    public Integer getCantidadProducto() {
+        return cantidadProducto;
     }
 
-    public void setCantidad_producto(Integer cantidad_producto) {
-        this.cantidad_producto = cantidad_producto;
+    public void setCantidadProducto(Integer cantidadProducto) {
+        this.cantidadProducto = cantidadProducto;
     }
 
     public Long getIdProducto() {
@@ -92,10 +89,9 @@ public class Pedido {
         return "Pedido{" +
                 "nroPedido=" + nroPedido +
                 ", fecha=" + fecha +
-                ", cantidad_productos=" + cantidad_producto +
+                ", cantidadProducto=" + cantidadProducto +
                 ", idProducto=" + idProducto +
                 ", idRevendedor=" + idRevendedor +
                 '}';
     }
-
 }

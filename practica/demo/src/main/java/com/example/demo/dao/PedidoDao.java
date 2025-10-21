@@ -9,11 +9,7 @@ import com.example.demo.model.Pedido;
 
 
 @Repository
-public interface PedidoDao extends JpaRepository<Pedido, Long>   {
-
-   List<Pedido> findByNroPedido(Long nroPedido);
-
-   
-
+public interface PedidoDao extends JpaRepository<Pedido, Long> {
+    List<Pedido> findByNroPedido(Long nroPedido);
 }
 
