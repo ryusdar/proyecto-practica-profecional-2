@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RestController
 public class ProductoController {
     @Autowired
     private ProductoDao productoDao;
@@ -15,5 +16,4 @@ public class ProductoController {
     public List<Producto> getProducto() {
         return productoDao.findAll();
     }
-
 }
