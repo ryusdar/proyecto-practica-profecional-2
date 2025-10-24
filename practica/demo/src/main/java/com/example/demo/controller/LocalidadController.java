@@ -12,16 +12,19 @@ public class LocalidadController {
     @Autowired
     private LocalidadDao localidadDao;
 
+    //OBTENER LOCALIDADES
     @GetMapping
     public List<Localidad> getLocalidades() {
         return localidadDao.findAll();
     }
 
+    //CARGAR LOCALIDADES
     @PostMapping
     public Localidad registrar(@RequestBody Localidad localidad) {
         return localidadDao.save(localidad);
     }
 
+    //ELIMINAR LOCALIDADES
     @DeleteMapping("/{id}")
     public void eliminar(@PathVariable Long id) {
         localidadDao.deleteById(id);

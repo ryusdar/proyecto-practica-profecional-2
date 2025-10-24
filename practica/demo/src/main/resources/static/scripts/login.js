@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (data.rol == 1) {
                 window.location.href = "dist/administracion.html";
             } else {
-                window.location.href = "dist/pedidos.html";
+                window.location.href = "dist/revendedores.html";
             }
 
         } catch (error) {

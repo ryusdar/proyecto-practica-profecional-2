@@ -1,6 +1,11 @@
 package com.example.demo.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "producto")
@@ -9,33 +14,29 @@ public class Producto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_producto")
-    private Long idProducto; // ✅ Cambiado a camelCase
+    private Long idProducto;
 
-    @Column(name = "nombre")
+    @Column(name = "nombre", nullable = false)
     private String nombre;
 
-    @Column(name = "precio")
+    @Column(name = "precio", nullable = false)
     private Double precio;
 
-    @Column(name = "stock")
-    private Integer stock;
+    @Column(name = "stock", nullable = false)
+    private int stock;
 
     @Column(name = "id_categoria")
-    private Integer idCategoria; // ✅ Cambiado a camelCase
+    private int idCategoria;
 
-    // Constructores
-    public Producto() {
-    }
+    public Producto() {}
 
-    public Producto(Long idProducto, String nombre, Double precio, Integer stock, Integer idCategoria) {
-        this.idProducto = idProducto;
+    public Producto(String nombre, Double precio, int stock, int idCategoria) {
         this.nombre = nombre;
         this.precio = precio;
         this.stock = stock;
         this.idCategoria = idCategoria;
     }
 
-    // Getters y Setters
     public Long getIdProducto() {
         return idProducto;
     }
@@ -68,11 +69,11 @@ public class Producto {
         this.stock = stock;
     }
 
-    public Integer getIdCategoria() {
+    public int getIdCategoria() {
         return idCategoria;
     }
 
-    public void setIdCategoria(Integer idCategoria) {
+    public void setIdCategoria(int idCategoria) {
         this.idCategoria = idCategoria;
     }
 

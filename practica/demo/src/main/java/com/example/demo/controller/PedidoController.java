@@ -1,69 +1,119 @@
 package com.example.demo.controller;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dao.DetallePedidoDao;
 import com.example.demo.dao.PedidoDao;
 import com.example.demo.dao.ProductoDao;
+import com.example.demo.dao.UsuarioDao;
+import com.example.demo.model.DetallePedido;
 import com.example.demo.model.Pedido;
 import com.example.demo.model.Producto;
+import com.example.demo.model.Usuario;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/pedidos")
+@CrossOrigin(origins = "*") 
 public class PedidoController {
 
     @Autowired
     private PedidoDao pedidoDao;
 
     @Autowired
+    private DetallePedidoDao detallePedidoDao;
+
+    @Autowired
+    private UsuarioDao usuarioDao;
+
+    @Autowired
     private ProductoDao productoDao;
 
-    @GetMapping("/pedido")
-    public List<Pedido> getPedido() {
-        return pedidoDao.findAll();
-    }
+    // CREAR PEDIDO
+    @PostMapping("/crear")
+    public ResponseEntity<?> crearPedido(@RequestBody Map<String, Object> datos) {
+        Long idUsuario = Long.valueOf(datos.get("idUsuario").toString());
+        List<Map<String, Object>> items = (List<Map<String, Object>>) datos.get("detalles");
 
-    @GetMapping("/pedido/buscar")
-    public List<Pedido> buscar(@RequestParam Long nroPedido) {
-        return pedidoDao.findByNroPedido(nroPedido);
-    }
+        Usuario usuario = usuarioDao.findById(idUsuario)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-    @PostMapping("/pedido")
-    public ResponseEntity<String> registrar(@RequestBody Pedido pedido) {
-        // Validar que el producto exista
-        if (pedido.getProducto() != null && pedido.getProducto().getIdProducto() != null) {
-            Producto producto = productoDao.findById(pedido.getProducto().getIdProducto())
-                    .orElse(null);
+        Pedido pedido = new Pedido();
+        pedido.setFecha(LocalDate.now());
+        pedido.setUsuario(usuario);
+        pedido = pedidoDao.save(pedido);
 
-            if (producto == null) {
-                return ResponseEntity.badRequest().body("Producto no encontrado");
+        List<DetallePedido> detalles = new ArrayList<>();
+
+        for (Map<String, Object> item : items) {
+            Long idProducto = Long.valueOf(item.get("idProducto").toString());
+            Integer cantidad = Integer.valueOf(item.get("cantidad").toString());
+
+            Producto producto = productoDao.findById(idProducto)
+                    .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+
+            Double precioUnitario = producto.getPrecio();
+
+            // VERIFICACIÓN STOCK
+            if (producto.getStock() < cantidad) {
+                throw new RuntimeException("Stock insuficiente para el producto: " + producto.getNombre());
             }
 
-            // Verificar stock disponible
-            if (producto.getStock() < pedido.getCantidadProducto()) {
-                return ResponseEntity.badRequest().body("Stock insuficiente");
-            }
-
-            // Actualizar stock
-            producto.setStock(producto.getStock() - pedido.getCantidadProducto());
+            // RESTA STOCK
+            producto.setStock(producto.getStock() - cantidad);
             productoDao.save(producto);
 
-            pedido.setProducto(producto);
+            // DETALLE PEDIDO
+            DetallePedido detalle = new DetallePedido(pedido, producto, cantidad, precioUnitario);
+            detallePedidoDao.save(detalle);
+
+            detalles.add(detalle);
         }
 
-        pedidoDao.save(pedido);
-        return ResponseEntity.ok("Pedido registrado correctamente");
+        Map<String, Object> respuesta = new HashMap<>();
+        respuesta.put("mensaje", "Pedido creado correctamente");
+        respuesta.put("nroPedido", pedido.getNroPedido());
+        respuesta.put("detalles", detalles);
+
+        return ResponseEntity.ok(respuesta);
     }
 
-    @DeleteMapping("/pedido/{id}")
-    public ResponseEntity<String> eliminar(@PathVariable Long id) {
-        if (!pedidoDao.existsById(id)) {
-            return ResponseEntity.badRequest().body("Pedido no encontrado");
+    // OBTENER PEDIDOS DE USUARIO
+    @GetMapping("/usuario/{idUsuario}")
+    public ResponseEntity<?> obtenerPedidosPorUsuario(@PathVariable Long idUsuario) {
+        List<Pedido> pedidos = pedidoDao.findByUsuario_IdUsuario(idUsuario);
+        if (pedidos.isEmpty()) {
+            return ResponseEntity.ok(Collections.emptyList());
         }
-        pedidoDao.deleteById(id);
-        return ResponseEntity.ok("Pedido eliminado correctamente");
+        return ResponseEntity.ok(pedidos);
+    }
+
+    // OBTENER DETALLES DE UN PEDIDO
+    @GetMapping("/{nroPedido}/detalles")
+    public ResponseEntity<?> obtenerDetallesDePedido(@PathVariable Long nroPedido) {
+        Pedido pedido = pedidoDao.findById(nroPedido)
+                .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
+
+        List<DetallePedido> detalles = pedido.getDetalles();
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("pedido", pedido);
+        data.put("detalles", detalles);
+
+        return ResponseEntity.ok(data);
     }
 }

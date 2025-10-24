@@ -18,13 +18,16 @@ document.addEventListener("DOMContentLoaded", () => {
         "/dist/pagos.html"
     ];
     const rutasAdmin = [
+         "/dist/pedidos.html",
+        "/dist/revendedores.html",
+        "/dist/pagos.html",
         "/dist/administracion.html"
     ];
 
     // Verificación de acceso
     if (rol === 2 && !rutasRevendedor.includes(path)) {
         alert("No tiene permiso para acceder a esta sección.");
-        window.location.href = "pedidos.html";
+        window.location.href = "revendedores.html";
         return;
     }
 

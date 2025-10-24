@@ -6,11 +6,6 @@ $(document).ready(function () {
             <td>
                 <select class="form-select productoDevolucion">
                     <option value="">Seleccione un producto</option>
-                    <option value="Shampoo Sólido">Shampoo Sólido</option>
-                    <option value="Acondicionador">Acondicionador</option>
-                    <option value="Jabón Natural">Jabón Natural</option>
-                    <option value="Crema Corporal">Crema Corporal</option>
-                    <option value="Perfume Vegano">Perfume Vegano</option>
                 </select>
             </td>
             <td><input type="number" class="form-control cantidadDevolucion" min="1" value="1"></td>
@@ -44,7 +39,7 @@ $(document).ready(function () {
 
         console.log("Productos a devolver:", devoluciones);
         alert("Pedido de devolución generado ✅");
-        // Aquí podrías enviar los datos a tu backend si corresponde
-        $("#tablaDevolucion tbody").html(''); // limpiar tabla después de generar
+
+        $("#tablaDevolucion tbody").html('');
     });
 });

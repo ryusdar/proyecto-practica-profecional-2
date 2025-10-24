@@ -7,9 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.model.Pedido;
 
-
 @Repository
 public interface PedidoDao extends JpaRepository<Pedido, Long> {
-    List<Pedido> findByNroPedido(Long nroPedido);
+    List<Pedido> findByUsuario_IdUsuario(Long idUsuario);
 }
-
