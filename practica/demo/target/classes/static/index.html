@@ -92,6 +92,9 @@
 
                             <div class="text-center mt-3">
                                 <a href="#" class="text-muted small">¿Olvidaste tu contraseña?</a>
+                            <a href="#" class="text-muted small" data-bs-toggle="modal" data-bs-target="#recuperarModal">¿Olvidaste tu contraseña?</a>                            </div>
+                            <div class="text-center mt-3">
+                                <a href="dist/registro.html" class="text-muted small">Registrarse</a>
                             </div>
                         </form>
                         <!-- Fin del formulario -->
@@ -109,5 +112,28 @@
         <!-- Core theme JS-->
         <script src="dist/js/scripts.js"></script>
         <script src="scripts/login.js"></script>
+      
+        <div class="modal fade" id="recuperarModal" tabindex="-1" aria-labelledby="recuperarModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content p-3">
+      <div class="modal-header">
+        <h5 class="modal-title" id="recuperarModalLabel">Recuperar contraseña</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formRecuperar">
+          <div class="mb-3">
+            <input type="email" id="emailRecuperar" class="form-control" placeholder="Ingresa tu email" required>
+          </div>
+          <div class="mb-3">
+            <input type="password" id="nuevaContraseña" class="form-control" placeholder="Nueva contraseña" required>
+          </div>
+          <button type="submit" class="btn btn-warning w-100">Cambiar contraseña</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+  <script src="scripts/recuperar.js"></script>
     </body>
 </html>

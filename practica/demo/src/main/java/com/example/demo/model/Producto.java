@@ -13,36 +13,36 @@ public class Producto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_producto;
+    @Column(name = "id_producto")
+    private Long idProducto;
 
-    @Column(name = "nombre")
+    @Column(name = "nombre", nullable = false)
     private String nombre;
 
-    @Column(name = "precio")
+    @Column(name = "precio", nullable = false)
     private Double precio;
 
-    @Column(name = "stock")
+    @Column(name = "stock", nullable = false)
     private int stock;
+
     @Column(name = "id_categoria")
-    private int id_categoria;
+    private int idCategoria;
 
-    public Producto() {
-    }
+    public Producto() {}
 
-    public Producto(Long id_producto, String nombre, Double precio, int stock, int id_categoria) {
-        this.id_producto = id_producto;
+    public Producto(String nombre, Double precio, int stock, int idCategoria) {
         this.nombre = nombre;
         this.precio = precio;
         this.stock = stock;
-        this.id_categoria = id_categoria;
+        this.idCategoria = idCategoria;
     }
 
-    public Long getId_producto() {
-        return id_producto;
+    public Long getIdProducto() {
+        return idProducto;
     }
 
-    public void setId_producto(Long id_producto) {
-        this.id_producto = id_producto;
+    public void setIdProducto(Long idProducto) {
+        this.idProducto = idProducto;
     }
 
     public String getNombre() {
@@ -61,30 +61,30 @@ public class Producto {
         this.precio = precio;
     }
 
-    public int getStock() {
+    public Integer getStock() {
         return stock;
     }
 
-    public void setStock(int stock) {
+    public void setStock(Integer stock) {
         this.stock = stock;
     }
 
-    public int getId_categoria() {
-        return id_categoria;
+    public int getIdCategoria() {
+        return idCategoria;
     }
 
-    public void setId_categoria(int id_categoria) {
-        this.id_categoria = id_categoria;
+    public void setIdCategoria(int idCategoria) {
+        this.idCategoria = idCategoria;
     }
 
     @Override
     public String toString() {
         return "Producto{" +
-                "id_producto=" + id_producto +
+                "idProducto=" + idProducto +
                 ", nombre='" + nombre + '\'' +
                 ", precio=" + precio +
                 ", stock=" + stock +
-                ", id_categoria=" + id_categoria +
+                ", idCategoria=" + idCategoria +
                 '}';
     }
 }

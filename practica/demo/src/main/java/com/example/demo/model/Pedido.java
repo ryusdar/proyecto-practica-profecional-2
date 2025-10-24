@@ -1,11 +1,17 @@
 package com.example.demo.model;
+
 import java.time.LocalDate;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -15,35 +21,25 @@ public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "nro_pedido")
-    private Long nroPedido;  // ✅ Cambia a camelCase
+    private Long nroPedido;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "fecha")
     private LocalDate fecha;
 
-    @Column(name = "cantidad_producto")
-    private Integer cantidadProducto;  // ✅ Cambia a camelCase
+    @ManyToOne
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    private Usuario usuario;
 
-    @Column(name = "id_producto")
-    private Long idProducto;
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetallePedido> detalles;
 
-    @Column(name = "id_revendedor")
-    private Long idRevendedor;
+    public Pedido() {}
 
-    // Constructor con parámetros
-    public Pedido(Long nroPedido, LocalDate fecha, Integer cantidadProducto, Long idProducto, Long idRevendedor) {
-        this.nroPedido = nroPedido;  // ✅ Correcto
+    public Pedido(LocalDate fecha, Usuario usuario) {
         this.fecha = fecha;
-        this.cantidadProducto = cantidadProducto;  // ✅ Correcto
-        this.idProducto = idProducto;
-        this.idRevendedor = idRevendedor;
+        this.usuario = usuario;
     }
 
-    // Constructor vacío
-    public Pedido() {
-    }
-
-    // Getters y setters
     public Long getNroPedido() {
         return nroPedido;
     }
@@ -60,38 +56,19 @@ public class Pedido {
         this.fecha = fecha;
     }
 
-    public Integer getCantidadProducto() {
-        return cantidadProducto;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setCantidadProducto(Integer cantidadProducto) {
-        this.cantidadProducto = cantidadProducto;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
-    public Long getIdProducto() {
-        return idProducto;
+    public List<DetallePedido> getDetalles() {
+        return detalles;
     }
 
-    public void setIdProducto(Long idProducto) {
-        this.idProducto = idProducto;
-    }
-
-    public Long getIdRevendedor() {
-        return idRevendedor;
-    }
-
-    public void setIdRevendedor(Long idRevendedor) {
-        this.idRevendedor = idRevendedor;
-    }
-
-    @Override
-    public String toString() {
-        return "Pedido{" +
-                "nroPedido=" + nroPedido +
-                ", fecha=" + fecha +
-                ", cantidadProducto=" + cantidadProducto +
-                ", idProducto=" + idProducto +
-                ", idRevendedor=" + idRevendedor +
-                '}';
+    public void setDetalles(List<DetallePedido> detalles) {
+        this.detalles = detalles;
     }
 }
