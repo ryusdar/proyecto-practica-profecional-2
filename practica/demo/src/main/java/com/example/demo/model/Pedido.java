@@ -1,12 +1,8 @@
 package com.example.demo.model;
+
 import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "pedido")
@@ -15,35 +11,36 @@ public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "nro_pedido")
-    private Long nroPedido;  // ✅ Cambia a camelCase
+    private Long nroPedido;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "fecha")
     private LocalDate fecha;
 
     @Column(name = "cantidad_producto")
-    private Integer cantidadProducto;  // ✅ Cambia a camelCase
+    private Integer cantidadProducto;
 
-    @Column(name = "id_producto")
-    private Long idProducto;
+    // ✅ OPCIÓN 1: Relación completa con JPA (RECOMENDADO)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_producto", nullable = false)
+    private Producto producto;
 
     @Column(name = "id_revendedor")
     private Long idRevendedor;
 
-    // Constructor con parámetros
-    public Pedido(Long nroPedido, LocalDate fecha, Integer cantidadProducto, Long idProducto, Long idRevendedor) {
-        this.nroPedido = nroPedido;  // ✅ Correcto
-        this.fecha = fecha;
-        this.cantidadProducto = cantidadProducto;  // ✅ Correcto
-        this.idProducto = idProducto;
-        this.idRevendedor = idRevendedor;
-    }
-
-    // Constructor vacío
+    // Constructores
     public Pedido() {
     }
 
-    // Getters y setters
+    public Pedido(Long nroPedido, LocalDate fecha, Integer cantidadProducto, Producto producto, Long idRevendedor) {
+        this.nroPedido = nroPedido;
+        this.fecha = fecha;
+        this.cantidadProducto = cantidadProducto;
+        this.producto = producto;
+        this.idRevendedor = idRevendedor;
+    }
+
+    // Getters y Setters
     public Long getNroPedido() {
         return nroPedido;
     }
@@ -68,12 +65,12 @@ public class Pedido {
         this.cantidadProducto = cantidadProducto;
     }
 
-    public Long getIdProducto() {
-        return idProducto;
+    public Producto getProducto() {
+        return producto;
     }
 
-    public void setIdProducto(Long idProducto) {
-        this.idProducto = idProducto;
+    public void setProducto(Producto producto) {
+        this.producto = producto;
     }
 
     public Long getIdRevendedor() {
@@ -90,7 +87,7 @@ public class Pedido {
                 "nroPedido=" + nroPedido +
                 ", fecha=" + fecha +
                 ", cantidadProducto=" + cantidadProducto +
-                ", idProducto=" + idProducto +
+                ", producto=" + (producto != null ? producto.getNombre() : "null") +
                 ", idRevendedor=" + idRevendedor +
                 '}';
     }
