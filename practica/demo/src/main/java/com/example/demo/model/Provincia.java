@@ -1,15 +1,14 @@
 package com.example.demo.model;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import java.util.List;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "provincia")
 public class Provincia {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_provincia")
@@ -18,16 +17,24 @@ public class Provincia {
     @Column(name = "nombre")
     private String nombre;
 
-    @Column(name = "id_pais")
-    private Long idPais;
+
+     @ManyToOne
+    @JoinColumn(name = "id_pais", referencedColumnName = "id_pais", nullable = false)
+    @JsonBackReference 
+    private Pais pais;
+
+   
+    @OneToMany(mappedBy = "provincia", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Localidad> localidades;
 
     public Provincia() {
     }
 
-    public Provincia(Long idPais, Long idProvincia, String nombre) {
-        this.idPais = idPais;
+    public Provincia(Long idProvincia, String nombre, Pais pais) {
         this.idProvincia = idProvincia;
         this.nombre = nombre;
+        this.pais = pais;
     }
 
     public Long getIdProvincia() {
@@ -46,25 +53,28 @@ public class Provincia {
         this.nombre = nombre;
     }
 
-    public Long getIdPais() {
-        return idPais;
+    public Pais getPais() {
+        return pais;
     }
 
-    public void setIdPais(Long idPais) {
-        this.idPais = idPais;
+    public void setPais(Pais pais) {
+        this.pais = pais;
+    }
+
+    public List<Localidad> getLocalidades() {
+        return localidades;
+    }
+
+    public void setLocalidades(List<Localidad> localidades) {
+        this.localidades = localidades;
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Provincia{");
-        sb.append("idProvincia=").append(idProvincia);
-        sb.append(", nombre=").append(nombre);
-        sb.append(", idPais=").append(idPais);
-        sb.append('}');
-        return sb.toString();
+        return "Provincia{" +
+                "idProvincia=" + idProvincia +
+                ", nombre='" + nombre + '\'' +
+                ", pais=" + (pais != null ? pais.getIdPais() : null) +
+                '}';
     }
-
-
-
-  }
+}

@@ -4,33 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="be551bfc-1a14-444d-9901-cc687339b632" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/java/com/example/demo/controller/UsuarioController.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/src/main/java/com/example/demo/controller/UsuarioController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/java/com/example/demo/dao/UsuarioDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/src/main/java/com/example/demo/dao/UsuarioDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/java/com/example/demo/model/Producto.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/src/main/java/com/example/demo/model/Producto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/resources/static/dist/administracion.html" beforeDir="false" afterPath="$PROJECT_DIR$/demo/src/main/resources/static/dist/administracion.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/resources/static/dist/pagos.html" beforeDir="false" afterPath="$PROJECT_DIR$/demo/src/main/resources/static/dist/pagos.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/resources/static/dist/pedidos.html" beforeDir="false" afterPath="$PROJECT_DIR$/demo/src/main/resources/static/dist/pedidos.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/resources/static/dist/revendedores.html" beforeDir="false" afterPath="$PROJECT_DIR$/demo/src/main/resources/static/dist/revendedores.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/resources/static/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/demo/src/main/resources/static/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/resources/static/scripts/administracion.js" beforeDir="false" afterPath="$PROJECT_DIR$/demo/src/main/resources/static/scripts/administracion.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/resources/static/scripts/pagos.js" beforeDir="false" afterPath="$PROJECT_DIR$/demo/src/main/resources/static/scripts/pagos.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/resources/static/scripts/pedidos.js" beforeDir="false" afterPath="$PROJECT_DIR$/demo/src/main/resources/static/scripts/pedidos.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/resources/static/scripts/revendedores.js" beforeDir="false" afterPath="$PROJECT_DIR$/demo/src/main/resources/static/scripts/revendedores.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/target/classes/com/example/demo/controller/UsuarioController.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/classes/com/example/demo/controller/UsuarioController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/target/classes/com/example/demo/dao/UsuarioDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/classes/com/example/demo/dao/UsuarioDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/target/classes/com/example/demo/model/Producto.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/classes/com/example/demo/model/Producto.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/target/classes/static/dist/administracion.html" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/classes/static/dist/administracion.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/target/classes/static/dist/pagos.html" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/classes/static/dist/pagos.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/target/classes/static/dist/pedidos.html" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/classes/static/dist/pedidos.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/target/classes/static/dist/revendedores.html" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/classes/static/dist/revendedores.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/target/classes/static/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/classes/static/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/target/classes/static/scripts/administracion.js" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/classes/static/scripts/administracion.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/target/classes/static/scripts/pagos.js" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/classes/static/scripts/pagos.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/target/classes/static/scripts/pedidos.js" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/classes/static/scripts/pedidos.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/target/classes/static/scripts/revendedores.js" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/classes/static/scripts/revendedores.js" afterDir="false" />
-    </list>
+    <list default="true" id="be551bfc-1a14-444d-9901-cc687339b632" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -59,15 +33,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Maven.demo [org.springframework.boot:spring-boot-maven-plugin:3.5.6:run].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Mauro/Documents/GitHub/proyecto-practica-profecional-2/practica&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Maven.demo [org.springframework.boot:spring-boot-maven-plugin:3.5.6:run].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Mauro/Desktop/MB/2DO AÑO/MODELADO/Proyecto 2do semestre/modelado"
   }
-}</component>
+}]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">

@@ -1,44 +1,102 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
+import com.example.demo.dao.*;
+import com.example.demo.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import com.example.demo.dao.PedidoDao;
-import com.example.demo.model.Pedido;
+import java.time.LocalDate;
+import java.util.*;
 
 @RestController
+@RequestMapping("/pedidos")
+@CrossOrigin(origins = "*") 
 public class PedidoController {
 
     @Autowired
     private PedidoDao pedidoDao;
 
-    @GetMapping("/api/pedido")
-    public List<Pedido> getpedido() {
-        return pedidoDao.findAll();
+    @Autowired
+    private DetallePedidoDao detallePedidoDao;
+
+    @Autowired
+    private UsuarioDao usuarioDao;
+
+    @Autowired
+    private ProductoDao productoDao;
+
+    // CREAR PEDIDO
+    @PostMapping("/crear")
+    public ResponseEntity<?> crearPedido(@RequestBody Map<String, Object> datos) {
+        Long idUsuario = Long.valueOf(datos.get("idUsuario").toString());
+        List<Map<String, Object>> items = (List<Map<String, Object>>) datos.get("detalles");
+
+        Usuario usuario = usuarioDao.findById(idUsuario)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        Pedido pedido = new Pedido();
+        pedido.setFecha(LocalDate.now());
+        pedido.setUsuario(usuario);
+        pedido = pedidoDao.save(pedido);
+
+        List<DetallePedido> detalles = new ArrayList<>();
+
+        for (Map<String, Object> item : items) {
+            Long idProducto = Long.valueOf(item.get("idProducto").toString());
+            Integer cantidad = Integer.valueOf(item.get("cantidad").toString());
+
+            Producto producto = productoDao.findById(idProducto)
+                    .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+
+            Double precioUnitario = producto.getPrecio();
+
+            // VERIFICACIÓN STOCK
+            if (producto.getStock() < cantidad) {
+                throw new RuntimeException("Stock insuficiente para el producto: " + producto.getNombre());
+            }
+
+            // RESTA STOCK
+            producto.setStock(producto.getStock() - cantidad);
+            productoDao.save(producto);
+
+            // DETALLE PEDIDO
+            DetallePedido detalle = new DetallePedido(pedido, producto, cantidad, precioUnitario);
+            detallePedidoDao.save(detalle);
+
+            detalles.add(detalle);
+        }
+
+        Map<String, Object> respuesta = new HashMap<>();
+        respuesta.put("mensaje", "Pedido creado correctamente");
+        respuesta.put("nroPedido", pedido.getNroPedido());
+        respuesta.put("detalles", detalles);
+
+        return ResponseEntity.ok(respuesta);
     }
 
-    @GetMapping("/buscar")
-    public List<Pedido> buscar(@RequestParam Long nroPedido) {
-        return pedidoDao.findByNroPedido(nroPedido);
+    // OBTENER PEDIDOS DE USUARIO
+    @GetMapping("/usuario/{idUsuario}")
+    public ResponseEntity<?> obtenerPedidosPorUsuario(@PathVariable Long idUsuario) {
+        List<Pedido> pedidos = pedidoDao.findByUsuario_IdUsuario(idUsuario);
+        if (pedidos.isEmpty()) {
+            return ResponseEntity.ok(Collections.emptyList());
+        }
+        return ResponseEntity.ok(pedidos);
     }
 
-    @PostMapping("/api/pedido")
-    public void registrar(@RequestBody Pedido pedido) {
-        pedidoDao.save(pedido);
-    }
+    // OBTENER DETALLES DE UN PEDIDO
+    @GetMapping("/{nroPedido}/detalles")
+    public ResponseEntity<?> obtenerDetallesDePedido(@PathVariable Long nroPedido) {
+        Pedido pedido = pedidoDao.findById(nroPedido)
+                .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
 
-    @DeleteMapping("/api/pedido/{id}")
-    public void eliminar(@PathVariable Long id) {
-        pedidoDao.deleteById(id);
+        List<DetallePedido> detalles = pedido.getDetalles();
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("pedido", pedido);
+        data.put("detalles", detalles);
+
+        return ResponseEntity.ok(data);
     }
 }
-
-

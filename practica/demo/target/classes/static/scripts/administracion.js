@@ -58,9 +58,7 @@ $("#filterCantidadMin, #filterCantidadMax").on("input", filtrarStock);
           <td>
             <select class="form-select producto" onchange="actualizarPrecio(this)">
               <option value="">Seleccione producto...</option>
-              <option value="Shampoo Sólido">Shampoo Sólido</option>
-              <option value="Acondicionador">Acondicionador</option>
-              <option value="Jabón Natural">Jabón Natural</option>
+             
             </select>
           </td>
           <td><input type="number" class="form-control cantidad" value="1" min="1" /></td>
