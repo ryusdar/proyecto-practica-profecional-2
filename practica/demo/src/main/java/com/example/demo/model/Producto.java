@@ -1,11 +1,6 @@
 package com.example.demo.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "producto")
@@ -13,36 +8,36 @@ public class Producto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_producto;
+    @Column(name = "id_producto")
+    private Long idProducto;
 
-    @Column(name = "nombre")
+    @Column(name = "nombre", nullable = false)
     private String nombre;
 
-    @Column(name = "precio")
+    @Column(name = "precio", nullable = false)
     private Double precio;
 
-    @Column(name = "stock")
+    @Column(name = "stock", nullable = false)
     private int stock;
-    @Column(name = "id_categoria")
-    private int id_categoria;
 
-    public Producto( String nombre, Double precio, Long id_producto, int stock, int id_categoria) {
+    @Column(name = "id_categoria")
+    private int idCategoria;
+
+    public Producto() {}
+
+    public Producto(String nombre, Double precio, int stock, int idCategoria) {
         this.nombre = nombre;
         this.precio = precio;
-        this.id_producto = id_producto;
         this.stock = stock;
-        this.id_categoria = id_categoria;
+        this.idCategoria = idCategoria;
     }
 
-        public int getId_categoria() {
-            return id_categoria;
-        }
+    public Long getIdProducto() {
+        return idProducto;
+    }
 
-         public void setId_categoria(int id_categoria) {
-        this.id_categoria = id_categoria;
-        }
-
-    public Producto() {
+    public void setIdProducto(Long idProducto) {
+        this.idProducto = idProducto;
     }
 
     public String getNombre() {
@@ -53,16 +48,12 @@ public class Producto {
         this.nombre = nombre;
     }
 
-      public Double getPrecio() {
+    public Double getPrecio() {
         return precio;
     }
 
     public void setPrecio(Double precio) {
         this.precio = precio;
-    }
-
-    public Long getId_producto() {
-        return id_producto;
     }
 
     public int getStock() {
@@ -73,24 +64,22 @@ public class Producto {
         this.stock = stock;
     }
 
-    public void setId_producto(Long id_producto) {
-        this.id_producto = id_producto;
+    public int getIdCategoria() {
+        return idCategoria;
+    }
+
+    public void setIdCategoria(int idCategoria) {
+        this.idCategoria = idCategoria;
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Producto{");
-        sb.append(", nombre=").append(nombre);
-        sb.append(", id_producto=").append(id_producto);
-        sb.append(", stock=").append(stock);
-        sb.append(", id_categoria=").append(id_categoria);
-        sb.append('}');
-        return sb.toString();
+        return "Producto{" +
+                "idProducto=" + idProducto +
+                ", nombre='" + nombre + '\'' +
+                ", precio=" + precio +
+                ", stock=" + stock +
+                ", idCategoria=" + idCategoria +
+                '}';
     }
-
-    
-
-    
-
 }

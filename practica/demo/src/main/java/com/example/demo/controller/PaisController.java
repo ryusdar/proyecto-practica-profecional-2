@@ -13,16 +13,19 @@ public class PaisController {
     @Autowired
     private PaisDao paisDao;
 
+    //OBTENER PAISES
     @GetMapping
     public List<Pais> getPaises() {
         return paisDao.findAll();
     }
 
+    //CARGAR PAISES
     @PostMapping
     public Pais registrar(@RequestBody Pais pais) {
         return paisDao.save(pais);
     }
 
+    //ELIMINAR PAISES
     @DeleteMapping("/{id}")
     public void eliminar(@PathVariable Long id) {
         paisDao.deleteById(id);

@@ -1,25 +1,26 @@
 package com.example.demo.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "pais")
 public class Pais {
-     @Id
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_pais")
-    private Long idPais;
+    private Long idPais; 
 
     @Column(name = "nombre")
     private String nombre;
 
-    public Pais() {
-    }
+    @OneToMany(mappedBy = "pais", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Provincia> provincias;
+
+    public Pais() {}
 
     public Pais(Long idPais, String nombre) {
         this.idPais = idPais;
@@ -42,15 +43,19 @@ public class Pais {
         this.nombre = nombre;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Pais{");
-        sb.append("idPais=").append(idPais);
-        sb.append(", nombre=").append(nombre);
-        sb.append('}');
-        return sb.toString();
+    public List<Provincia> getProvincias() {
+        return provincias;
     }
 
+    public void setProvincias(List<Provincia> provincias) {
+        this.provincias = provincias;
+    }
 
+    @Override
+    public String toString() {
+        return "Pais{" +
+                "idPais=" + idPais +
+                ", nombre='" + nombre + '\'' +
+                '}';
+    }
 }
