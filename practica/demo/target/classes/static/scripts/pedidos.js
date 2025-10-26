@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const btnAgregar = document.getElementById("agregarFila");
   const btnEnviar = document.getElementById("pedido");
   const totalGeneral = document.getElementById("totalGeneral");
-  const idUsuario = localStorage.getItem("id_usuario") || 1; 
+  const idUsuario = localStorage.getItem("id_usuario") || 1;
 
   const tablaConfirmacion = document.getElementById("tablaConfirmacion");
   const totalConfirmacion = document.getElementById("totalConfirmacion");
@@ -12,23 +12,24 @@ document.addEventListener("DOMContentLoaded", async () => {
   let productos = [];
   let detallesTemporales = [];
 
-  //  CARGA DESDE PRODUCTOS
+  // 🔹 CARGA DE PRODUCTOS DESDE EL SERVIDOR
+  try {
     const response = await fetch("http://localhost:8080/productos");
     productos = await response.json();
-    actualizarSelects();
-  
+  } catch (error) {
+    console.error("Error al cargar productos:", error);
+    alert("❌ No se pudieron cargar los productos.");
+  }
 
-  // PRODUCTOS A LISTA
-  function actualizarSelects() {
-    document.querySelectorAll("select.producto").forEach(select => {
-      select.innerHTML = '<option value="">Seleccione un producto</option>';
-      productos.forEach(p => {
-        select.innerHTML += `<option value="${p.idProducto}" data-precio="${p.precio}">${p.nombre}</option>`;
-      });
+  // 🔹 FUNCIÓN PARA ACTUALIZAR UN SOLO SELECT
+  function actualizarSelect(select) {
+    select.innerHTML = '<option value="">Seleccione un producto</option>';
+    productos.forEach(p => {
+      select.innerHTML += `<option value="${p.idProducto}" data-precio="${p.precio}">${p.nombre}</option>`;
     });
   }
 
-  // AGREGAR FILA
+  // 🔹 AGREGAR NUEVA FILA
   btnAgregar.addEventListener("click", () => {
     const fila = document.createElement("tr");
     fila.innerHTML = `
@@ -43,12 +44,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       <td><button type="button" class="btn btn-danger btn-sm eliminar">X</button></td>
     `;
     tablaPedido.appendChild(fila);
-    actualizarSelects();
+
+    // ✅ Solo actualizar el select de la nueva fila
+    const selectNuevo = fila.querySelector("select.producto");
+    actualizarSelect(selectNuevo);
   });
 
-  // TABLA
+  // 🔹 EVENTOS DE LA TABLA
   tablaPedido.addEventListener("input", e => {
-    if (e.target.classList.contains("cantidad")) recalcularFila(e.target.closest("tr"));
+    if (e.target.classList.contains("cantidad")) {
+      recalcularFila(e.target.closest("tr"));
+    }
   });
 
   tablaPedido.addEventListener("change", e => {
@@ -68,7 +74,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  //  CALCULOS
+  // 🔹 FUNCIONES DE CÁLCULO
   function recalcularFila(fila) {
     const cantidad = parseInt(fila.querySelector(".cantidad").value) || 0;
     const precio = parseFloat(fila.querySelector(".precio").value) || 0;
@@ -85,7 +91,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     totalGeneral.textContent = total.toFixed(2);
   }
 
-  // VISTA PREVIA
+  // 🔹 PREVISUALIZAR PEDIDO
   btnEnviar.addEventListener("click", () => {
     const filas = document.querySelectorAll("#tablaPedido tbody tr");
     detallesTemporales = [];
@@ -123,7 +129,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     new bootstrap.Modal(document.getElementById("confirmarModal")).show();
   });
 
-  // CONFIRMACION PEDIDO
+  // 🔹 CONFIRMAR PEDIDO
   btnConfirmar.addEventListener("click", async () => {
     const pedido = { idUsuario: parseInt(idUsuario), detalles: detallesTemporales };
 
@@ -150,4 +156,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       alert("❌ Error de conexión con el servidor.");
     }
   });
+
+  // 🔹 Agregar la primera fila al cargar
+  btnAgregar.click();
 });
