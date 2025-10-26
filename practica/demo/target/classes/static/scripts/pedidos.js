@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // AGREGAR FILA
+  // 🔹 AGREGAR NUEVA FILA
   btnAgregar.addEventListener("click", () => {
     const fila = document.createElement("tr");
     fila.innerHTML = `
@@ -42,10 +42,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       <td><button type="button" class="btn btn-danger btn-sm eliminar">X</button></td>
     `;
     tablaPedido.appendChild(fila);
-    actualizarSelects();
+
+    // ✅ Solo actualizar el select de la nueva fila
+    const selectNuevo = fila.querySelector("select.producto");
+    actualizarSelect(selectNuevo);
   });
 
-  // TABLA
+  // 🔹 EVENTOS DE LA TABLA
   tablaPedido.addEventListener("input", e => {
     if (e.target.classList.contains("cantidad")) {
       recalcularFila(e.target.closest("tr"));
@@ -86,7 +89,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     totalGeneral.textContent = total.toFixed(2);
   }
 
-  // VISTA PREVIA
+  // 🔹 PREVISUALIZAR PEDIDO
   btnEnviar.addEventListener("click", () => {
     const filas = document.querySelectorAll("#tablaPedido tbody tr");
     detallesTemporales = [];
@@ -124,7 +127,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     new bootstrap.Modal(document.getElementById("confirmarModal")).show();
   });
 
-  // CONFIRMACION PEDIDO
+  // 🔹 CONFIRMAR PEDIDO
   btnConfirmar.addEventListener("click", async () => {
     const pedido = { idUsuario: parseInt(idUsuario), detalles: detallesTemporales };
 
