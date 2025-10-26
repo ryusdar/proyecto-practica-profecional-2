@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   productos = await response.json();
   actualizarSelects();
 
-  // PRODUCTOS A LISTA
+  // PRODUCTOS A SELECTS
   function actualizarSelects() {
     document.querySelectorAll("select.producto").forEach(select => {
       select.innerHTML = '<option value="">Seleccione un producto</option>';
@@ -27,7 +27,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // 🔹 AGREGAR NUEVA FILA
+  function actualizarSelect(select) {
+    select.innerHTML = '<option value="">Seleccione un producto</option>';
+    productos.forEach(p => {
+      select.innerHTML += `<option value="${p.idProducto}" data-precio="${p.precio}">${p.nombre}</option>`;
+    });
+  }
+
+  // 🔹 AGREGAR FILA
   btnAgregar.addEventListener("click", () => {
     const fila = document.createElement("tr");
     fila.innerHTML = `
@@ -43,12 +50,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     `;
     tablaPedido.appendChild(fila);
 
-    // ✅ Solo actualizar el select de la nueva fila
-    const selectNuevo = fila.querySelector("select.producto");
-    actualizarSelect(selectNuevo);
+    // Actualizar solo el select nuevo
+    actualizarSelect(fila.querySelector("select.producto"));
   });
 
-  // 🔹 EVENTOS DE LA TABLA
+  // 🔹 EVENTOS DE TABLA
   tablaPedido.addEventListener("input", e => {
     if (e.target.classList.contains("cantidad")) {
       recalcularFila(e.target.closest("tr"));
@@ -72,7 +78,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  // CALCULOS
+  // 🔹 CALCULOS
   function recalcularFila(fila) {
     const cantidad = parseInt(fila.querySelector(".cantidad").value) || 0;
     const precio = parseFloat(fila.querySelector(".precio").value) || 0;
@@ -94,6 +100,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const filas = document.querySelectorAll("#tablaPedido tbody tr");
     detallesTemporales = [];
     let total = 0;
+
+    // Limpiar tabla confirmación
     tablaConfirmacion.innerHTML = "";
 
     filas.forEach(fila => {
@@ -105,7 +113,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (idProducto && cantidad > 0 && productoObj) {
         const subtotal = cantidad * precio;
         total += subtotal;
-
         detallesTemporales.push({ idProducto, cantidad, precio });
 
         tablaConfirmacion.innerHTML += `
@@ -124,6 +131,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     totalConfirmacion.textContent = total.toFixed(2);
+
+    // Mostrar modal de confirmación
     new bootstrap.Modal(document.getElementById("confirmarModal")).show();
   });
 
@@ -143,7 +152,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         alert(`✅ ${data.mensaje}\nNúmero de pedido: ${data.nroPedido}`);
         tablaPedido.innerHTML = "";
         recalcularTotalGeneral();
-        btnAgregar.click();
+        btnAgregar.click(); // agregar una fila vacía
         bootstrap.Modal.getInstance(document.getElementById("confirmarModal")).hide();
       } else {
         const errorText = await response.text();
