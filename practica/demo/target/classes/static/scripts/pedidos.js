@@ -12,20 +12,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   let productos = [];
   let detallesTemporales = [];
 
-  // 🔹 CARGA DE PRODUCTOS DESDE EL SERVIDOR
-  try {
-    const response = await fetch("http://localhost:8080/productos");
-    productos = await response.json();
-  } catch (error) {
-    console.error("Error al cargar productos:", error);
-    alert("❌ No se pudieron cargar los productos.");
-  }
+  // CARGA DESDE PRODUCTOS
+  const response = await fetch("http://localhost:8080/productos");
+  productos = await response.json();
+  actualizarSelects();
 
-  // 🔹 FUNCIÓN PARA ACTUALIZAR UN SOLO SELECT
-  function actualizarSelect(select) {
-    select.innerHTML = '<option value="">Seleccione un producto</option>';
-    productos.forEach(p => {
-      select.innerHTML += `<option value="${p.idProducto}" data-precio="${p.precio}">${p.nombre}</option>`;
+  // PRODUCTOS A LISTA
+  function actualizarSelects() {
+    document.querySelectorAll("select.producto").forEach(select => {
+      select.innerHTML = '<option value="">Seleccione un producto</option>';
+      productos.forEach(p => {
+        select.innerHTML += `<option value="${p.idProducto}" data-precio="${p.precio}">${p.nombre}</option>`;
+      });
     });
   }
 
@@ -74,7 +72,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  // 🔹 FUNCIONES DE CÁLCULO
+  // CALCULOS
   function recalcularFila(fila) {
     const cantidad = parseInt(fila.querySelector(".cantidad").value) || 0;
     const precio = parseFloat(fila.querySelector(".precio").value) || 0;
@@ -157,6 +155,4 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  // 🔹 Agregar la primera fila al cargar
-  btnAgregar.click();
 });
