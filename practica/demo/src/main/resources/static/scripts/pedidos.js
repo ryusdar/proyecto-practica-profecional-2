@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const btnAgregar = document.getElementById("agregarFila");
   const btnEnviar = document.getElementById("pedido");
   const totalGeneral = document.getElementById("totalGeneral");
-  const idUsuario = localStorage.getItem("id_usuario") || 1; 
+  const idUsuario = localStorage.getItem("id_usuario") || 1;
 
   const tablaConfirmacion = document.getElementById("tablaConfirmacion");
   const totalConfirmacion = document.getElementById("totalConfirmacion");
@@ -12,11 +12,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   let productos = [];
   let detallesTemporales = [];
 
-  //  CARGA DESDE PRODUCTOS
-    const response = await fetch("http://localhost:8080/productos");
-    productos = await response.json();
-    actualizarSelects();
-  
+  // CARGA DESDE PRODUCTOS
+  const response = await fetch("http://localhost:8080/productos");
+  productos = await response.json();
+  actualizarSelects();
 
   // PRODUCTOS A LISTA
   function actualizarSelects() {
@@ -48,7 +47,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // TABLA
   tablaPedido.addEventListener("input", e => {
-    if (e.target.classList.contains("cantidad")) recalcularFila(e.target.closest("tr"));
+    if (e.target.classList.contains("cantidad")) {
+      recalcularFila(e.target.closest("tr"));
+    }
   });
 
   tablaPedido.addEventListener("change", e => {
@@ -68,7 +69,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  //  CALCULOS
+  // CALCULOS
   function recalcularFila(fila) {
     const cantidad = parseInt(fila.querySelector(".cantidad").value) || 0;
     const precio = parseFloat(fila.querySelector(".precio").value) || 0;
@@ -150,4 +151,5 @@ document.addEventListener("DOMContentLoaded", async () => {
       alert("❌ Error de conexión con el servidor.");
     }
   });
+
 });
