@@ -93,6 +93,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const idProducto = parseInt(fila.querySelector(".producto").value);
       const cantidad = parseInt(fila.querySelector(".cantidad").value);
       const precio = parseFloat(fila.querySelector(".precio").value);
+      const stock = productos.find(p => p.idProducto === idProducto)?.stock || 0;
       const productoObj = productos.find(p => p.idProducto === idProducto);
 
       if (idProducto && cantidad > 0 && productoObj) {
@@ -105,6 +106,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           <tr>
             <td>${productoObj.nombre}</td>
             <td>${cantidad}</td>
+            <td>${stock}</td>
             <td>${precio.toFixed(2)}</td>
             <td>${subtotal.toFixed(2)}</td>
           </tr>`;
@@ -140,7 +142,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         bootstrap.Modal.getInstance(document.getElementById("confirmarModal")).hide();
       } else {
         const errorText = await response.text();
-        alert("❌ Error al registrar pedido: " + errorText);
+        alert("❌ Error al registrar pedido: " + "revisar el stock de los productos.");
       }
     } catch (error) {
       console.error("Error al enviar pedido:", error);
