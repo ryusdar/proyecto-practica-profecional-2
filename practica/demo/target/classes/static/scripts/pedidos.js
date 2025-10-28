@@ -15,33 +15,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   // CARGA DESDE PRODUCTOS
   const response = await fetch("http://localhost:8080/productos");
   productos = await response.json();
-  actualizarSelects();
 
-  // PRODUCTOS A SELECTS
-  function actualizarSelects() {
-    document.querySelectorAll("select.producto").forEach(select => {
-      select.innerHTML = '<option value="">Seleccione un producto</option>';
-      productos.forEach(p => {
-        select.innerHTML += `<option value="${p.idProducto}" data-precio="${p.precio}">${p.nombre}</option>`;
-      });
-    });
-  }
-
-  function actualizarSelect(select) {
-    select.innerHTML = '<option value="">Seleccione un producto</option>';
-    productos.forEach(p => {
-      select.innerHTML += `<option value="${p.idProducto}" data-precio="${p.precio}">${p.nombre}</option>`;
-    });
-  }
-
-  // 🔹 AGREGAR FILA
+  // AGREGAR FILA
   btnAgregar.addEventListener("click", () => {
     const fila = document.createElement("tr");
     fila.innerHTML = `
       <td>
-        <select class="form-select producto">
-          <option value="">Seleccione un producto</option>
-        </select>
+        <select class="form-select producto"></select>
       </td>
       <td><input type="number" class="form-control cantidad" value="1" min="1"></td>
       <td><input type="number" class="form-control precio" value="0" readonly></td>
@@ -49,12 +29,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       <td><button type="button" class="btn btn-danger btn-sm eliminar">X</button></td>
     `;
     tablaPedido.appendChild(fila);
-
-    // Actualizar solo el select nuevo
-    actualizarSelect(fila.querySelector("select.producto"));
+    actualizarSelect(fila); // Solo actualizamos el select de la fila nueva
   });
 
-  // 🔹 EVENTOS DE TABLA
+  // FUNCION PARA ACTUALIZAR SOLO EL SELECT NUEVO
+  function actualizarSelect(fila) {
+    const select = fila.querySelector("select.producto");
+    select.innerHTML = '<option value="">Seleccione un producto</option>';
+    productos.forEach(p => {
+      select.innerHTML += `<option value="${p.idProducto}" data-precio="${p.precio}">${p.nombre}</option>`;
+    });
+  }
+
+  // TABLA
   tablaPedido.addEventListener("input", e => {
     if (e.target.classList.contains("cantidad")) {
       recalcularFila(e.target.closest("tr"));
@@ -78,7 +65,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  // 🔹 CALCULOS
+  // CALCULOS
   function recalcularFila(fila) {
     const cantidad = parseInt(fila.querySelector(".cantidad").value) || 0;
     const precio = parseFloat(fila.querySelector(".precio").value) || 0;
@@ -95,13 +82,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     totalGeneral.textContent = total.toFixed(2);
   }
 
-  // 🔹 PREVISUALIZAR PEDIDO
+  // VISTA PREVIA
   btnEnviar.addEventListener("click", () => {
     const filas = document.querySelectorAll("#tablaPedido tbody tr");
     detallesTemporales = [];
     let total = 0;
-
-    // Limpiar tabla confirmación
     tablaConfirmacion.innerHTML = "";
 
     filas.forEach(fila => {
@@ -113,6 +98,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (idProducto && cantidad > 0 && productoObj) {
         const subtotal = cantidad * precio;
         total += subtotal;
+
         detallesTemporales.push({ idProducto, cantidad, precio });
 
         tablaConfirmacion.innerHTML += `
@@ -131,12 +117,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     totalConfirmacion.textContent = total.toFixed(2);
-
-    // Mostrar modal de confirmación
     new bootstrap.Modal(document.getElementById("confirmarModal")).show();
   });
 
-  // 🔹 CONFIRMAR PEDIDO
+  // CONFIRMACION PEDIDO
   btnConfirmar.addEventListener("click", async () => {
     const pedido = { idUsuario: parseInt(idUsuario), detalles: detallesTemporales };
 
@@ -152,7 +136,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         alert(`✅ ${data.mensaje}\nNúmero de pedido: ${data.nroPedido}`);
         tablaPedido.innerHTML = "";
         recalcularTotalGeneral();
-        btnAgregar.click(); // agregar una fila vacía
+        btnAgregar.click();
         bootstrap.Modal.getInstance(document.getElementById("confirmarModal")).hide();
       } else {
         const errorText = await response.text();
@@ -165,3 +149,4 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
 });
+
