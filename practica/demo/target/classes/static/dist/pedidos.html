@@ -1,226 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <meta name="description" content="" />
-  <meta name="author" content="" />
-  <title>Almamia - Pedidos</title>
-  <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-  <!-- Google fonts-->
-  <link href="https://fonts.googleapis.com/css?family=Raleway:100,200,300,400,600,700,800,900" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css?family=Lora:400,700" rel="stylesheet" />
-  <!-- Bootstrap core CSS-->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <!-- Theme CSS-->
-  <link href="css/styles.css" rel="stylesheet" />
-  <!-- Select2 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Almamia - Pedidos</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Raleway:100,200,300,400,600,700,800,900" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,700" rel="stylesheet" />
+    <!-- Bootstrap core CSS-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Theme CSS-->
+    <link href="css/styles.css" rel="stylesheet" />
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
-  <style>
-    h2,
-    h4,
-    label,
-    th,
-    td,
-    p,
-    .nav-link {
-      color: #fff !important;
-    }
+    <style>
+        h2, h4, label, th, td, p, .nav-link {
+            color: #fff !important;
+        }
+        h2, h4 {
+            color: #000 !important; /* títulos en negro */
+        }
+        .bg-faded {
+            background-color: rgba(0,0,0,0.6) !important;
+        }
+        .form-control, .form-select {
+            background-color: #f8f9fa;
+        }
+        .table thead {
+            background-color: #007bff !important;
+            color: #fff !important;
+        }
+        .table tbody tr {
+            background-color: #f8f9fa;
+        }
+        .table tbody tr td.total {
+            color: #000 !important; /* total en negro */
+            font-weight: bold;
+        }
+        .section-heading {
+            color: #000 !important;
+        }
+         #confirmarModal .modal-content {
+    background-color: #f8f9fa !important; /* Fondo claro */
+    color: #000 !important; /* Texto negro */
+  }
 
-    h2,
-    h4 {
-      color: #000 !important;
-      /* títulos en negro */
-    }
+  #confirmarModal .modal-header {
+    background-color: #e9ecef !important;
+    color: #000 !important;
+    border-bottom: 2px solid #ccc;
+  }
 
-    .bg-faded {
-      background-color: rgba(0, 0, 0, 0.6) !important;
-    }
+  #confirmarModal .modal-body table {
+    color: #000 !important;
+  }
 
-    .form-control,
-    .form-select {
-      background-color: #f8f9fa;
-    }
+  #confirmarModal .modal-footer {
+    background-color: #e9ecef !important;
+  }
 
-    .table thead {
-      background-color: #007bff !important;
-      color: #fff !important;
-    }
+  #confirmarModal .btn {
+    color: #fff !important;
+  }
+  #confirmarModal * {
+  color: #000 !important;
+}
 
-    .table tbody tr {
-      background-color: #f8f9fa;
-    }
+#confirmarModal .modal-content {
+  background-color: #f8f9fa !important; /* fondo claro */
+}
 
-    .table tbody tr td.total {
-      color: #000 !important;
-      /* total en negro */
-      font-weight: bold;
-    }
+#confirmarModal .table thead {
+  background-color: #dee2e6 !important; /* encabezado gris claro */
+  color: #000 !important;
+}
 
-    .section-heading {
-      color: #000 !important;
-    }
+#confirmarModal .modal-header,
+#confirmarModal .modal-footer {
+  background-color: #e9ecef !important;
+  border-color: #ccc;
+}
 
-    #confirmarModal .modal-content {
-      background-color: #f8f9fa !important;
-      /* Fondo claro */
-      color: #000 !important;
-      /* Texto negro */
-    }
+#confirmarModal .btn-success {
+  background-color: #198754 !important;
+}
 
-    #confirmarModal .modal-header {
-      background-color: #e9ecef !important;
-      color: #000 !important;
-      border-bottom: 2px solid #ccc;
-    }
-
-    #confirmarModal .modal-body table {
-      color: #000 !important;
-    }
-
-    #confirmarModal .modal-footer {
-      background-color: #e9ecef !important;
-    }
-
-    #confirmarModal .btn {
-      color: #fff !important;
-    }
-
-    #confirmarModal * {
-      color: #000 !important;
-    }
-
-    #confirmarModal .modal-content {
-      background-color: #f8f9fa !important;
-      /* fondo claro */
-    }
-
-    #confirmarModal .table thead {
-      background-color: #dee2e6 !important;
-      /* encabezado gris claro */
-      color: #000 !important;
-    }
-
-    #confirmarModal .modal-header,
-    #confirmarModal .modal-footer {
-      background-color: #e9ecef !important;
-      border-color: #ccc;
-    }
-
-    #confirmarModal .btn-success {
-      background-color: #198754 !important;
-    }
-
-    #confirmarModal .btn-secondary {
-      background-color: #6c757d !important;
-    }
-  </style>
+#confirmarModal .btn-secondary {
+  background-color: #6c757d !important;
+}
+    </style>
 </head>
 
 <body>
-  <header>
+<header>
     <h1 class="site-heading text-center text-faded d-none d-lg-block">
-      <span class="site-heading-upper text-primary mb-3">Pedidos</span>
-      <span class="site-heading-lower">Almamia</span>
+        <span class="site-heading-upper text-primary mb-3">Pedidos</span>
+        <span class="site-heading-lower">Almamia</span>
     </h1>
-  </header>
+</header>
 
-  <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
     <div class="container">
-      <ul class="navbar-nav mx-auto">
-        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="../index.html">Inicio</a></li>
-        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase active" href="pedidos.html">Pedidos</a></li>
-        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="revendedores.html">Revendedores</a></li>
-        <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="administracion.html">Administración</a>
-        </li>
-      </ul>
+        <ul class="navbar-nav mx-auto">
+            <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="../index.html">Inicio</a></li>
+            <li class="nav-item px-lg-4"><a class="nav-link text-uppercase active" href="pedidos.html">Pedidos</a></li>
+            <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="revendedores.html">Revendedores</a></li>
+            <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="administracion.html">Administración</a></li>
+        </ul>
     </div>
-  </nav>
+</nav>
 
-  <section class="page-section">
+<section class="page-section">
     <div class="container text-center">
 
-      <div class="bg-faded p-4 rounded shadow">
-        <h2 class="text-center mb-4 text-white">📝 Nuevo Pedido</h2>
+        <div class="bg-faded p-4 rounded shadow">
+            <h2 class="text-center mb-4 text-white">📝 Nuevo Pedido</h2>
 
-        <div class="table-responsive">
-          <table class="table table-bordered text-center align-middle" id="tablaPedido">
-            <thead class="table-primary text-dark">
-              <tr>
-                <th>Producto</th>
-                <th>Cantidad</th>
-                <th>Precio Unitario ($)</th>
-                <th>Total ($)</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Filas se agregan dinámicamente con JS -->
-            </tbody>
-            <tfoot>
-              <tr>
-                <th colspan="3" class="text-end">Total General:</th>
-                <th id="totalGeneral" class="text-dark">0.00</th>
-                <th></th>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
+            <div class="table-responsive">
+                <table class="table table-bordered text-center align-middle" id="tablaPedido">
+                    <thead class="table-primary text-dark">
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario ($)</th>
+                        <th>Total ($)</th>
+                        <th>Acción</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th colspan="3" class="text-end">Total General:</th>
+                        <th id="totalGeneral" class="text-white">0.00</th>
+                        <th></th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
 
-        <div class="d-flex justify-content-between mt-3 align-items-center">
-          <button type="button" id="agregarFila" class="btn btn-primary">Agregar Producto</button>
-        </div>
+            <div class="d-flex justify-content-between mt-3 align-items-center">
+                <button type="button" id="agregarFila" class="btn btn-primary">Agregar Producto</button>
+            </div>
 
-        <div class="text-center mt-4">
-          <button type="button" class="btn btn-success btn-lg" id="pedido">Enviar Pedido</button>
+            <div class="text-center mt-4">
+                <button type="button" class="btn btn-success btn-lg" id="pedido">Enviar Pedido</button>
+            </div>
         </div>
-      </div>
 
     </div>
-  </section>
+</section>
 
-  <footer class="footer text-faded text-center py-5">
+<footer class="footer text-faded text-center py-5">
     <div class="container">
-      <p class="m-0 small">Copyright &copy; Almamia 2025</p>
+        <p class="m-0 small">Copyright &copy; Almamia 2025</p>
     </div>
-  </footer>
-  <!-- Modal de confirmación de pedido -->
-  <div class="modal fade" id="confirmarModal" tabindex="-1" aria-labelledby="confirmarModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="confirmarModalLabel">Confirmar Pedido</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-        </div>
-        <div class="modal-body">
-          <table class="table table-striped text-center">
-            <thead>
-              <tr>
-                <th>Producto</th>
-                <th>Cantidad</th>
-                <th>Precio Unitario ($)</th>
-                <th>Subtotal ($)</th>
-              </tr>
-            </thead>
-            <tbody id="tablaConfirmacion"></tbody>
-            <tfoot>
-              <tr>
-                <th colspan="3" class="text-end">Total:</th>
-                <th id="totalConfirmacion"></th>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-success" id="confirmarPedido">Confirmar Pedido</button>
-        </div>
+</footer>
+<!-- Modal de confirmación de pedido -->
+<div class="modal fade" id="confirmarModal" tabindex="-1" aria-labelledby="confirmarModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmarModalLabel">Confirmar Pedido</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-striped text-center">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Cantidad</th>
+              <th>Precio Unitario ($)</th>
+              <th>Subtotal ($)</th>
+            </tr>
+          </thead>
+          <tbody id="tablaConfirmacion"></tbody>
+          <tfoot>
+            <tr>
+              <th colspan="3" class="text-end">Total:</th>
+              <th id="totalConfirmacion"></th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-success" id="confirmarPedido">Confirmar Pedido</button>
       </div>
     </div>
   </div>
+</div>
 
 </body>
 <!-- Scripts -->
