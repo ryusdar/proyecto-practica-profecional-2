@@ -1,14 +1,24 @@
 package com.example.demo.model;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "localidad")
 public class Localidad {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_localidad")
@@ -17,16 +27,24 @@ public class Localidad {
     @Column(name = "nombre")
     private String nombre;
 
-    @Column(name = "id_provincia")
-    private Long idProvincia;
+    
+    @ManyToOne
+    @JoinColumn(name = "id_provincia", referencedColumnName = "id_provincia", nullable = false)
+    @JsonBackReference 
+    private Provincia provincia;
+
+    
+    @OneToMany(mappedBy = "localidad", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Domicilio> domicilios;
 
     public Localidad() {
     }
 
-    public Localidad(Long idLocalidad, Long idProvincia, String nombre) {
+    public Localidad(Long idLocalidad, String nombre, Provincia provincia) {
         this.idLocalidad = idLocalidad;
-        this.idProvincia = idProvincia;
         this.nombre = nombre;
+        this.provincia = provincia;
     }
 
     public Long getIdLocalidad() {
@@ -45,27 +63,28 @@ public class Localidad {
         this.nombre = nombre;
     }
 
-    public Long getIdProvincia() {
-        return idProvincia;
+    public Provincia getProvincia() {
+        return provincia;
     }
 
-    public void setIdProvincia(Long idProvincia) {
-        this.idProvincia = idProvincia;
+    public void setProvincia(Provincia provincia) {
+        this.provincia = provincia;
+    }
+
+    public List<Domicilio> getDomicilios() {
+        return domicilios;
+    }
+
+    public void setDomicilios(List<Domicilio> domicilios) {
+        this.domicilios = domicilios;
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Localidad{");
-        sb.append("idLocalidad=").append(idLocalidad);
-        sb.append(", nombre=").append(nombre);
-        sb.append(", idProvincia=").append(idProvincia);
-        sb.append('}');
-        return sb.toString();
+        return "Localidad{" +
+                "idLocalidad=" + idLocalidad +
+                ", nombre='" + nombre + '\'' +
+                ", provincia=" + (provincia != null ? provincia.getIdProvincia() : null) +
+                '}';
     }
-
-    
-
-
-
 }

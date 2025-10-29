@@ -1,11 +1,15 @@
 package com.example.demo.controller;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import com.example.demo.dao.UsuarioDao;
 import com.example.demo.model.Usuario;
 
@@ -21,9 +25,39 @@ public class UsuarioController {
         return usuarioDao.findAll();
     }
 
-    @PostMapping
-    public Usuario registrar(@RequestBody Usuario usuario) {
-        return usuarioDao.save(usuario);
+    @PostMapping("/registrar")
+    public ResponseEntity<?> registrar(@RequestBody Usuario usuario) {
+        usuario.setFechaAlta(LocalDate.now());
+        usuario.setActivo((byte) 1);
+        usuario.setRol(2);
+
+        System.out.println("🟢 Usuario recibido: " + usuario);
+
+        usuarioDao.save(usuario);
+
+        Map<String, Object> respuesta = new HashMap<>();
+        respuesta.put("mensaje", "Usuario registrado correctamente");
+        respuesta.put("usuario", usuario);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(respuesta);
+    }
+
+    @PostMapping("/recuperar")
+    public ResponseEntity<?> recuperarContraseña(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        String nuevaPass = body.get("nuevaContraseña");
+
+        Usuario usuario = usuarioDao.findByEmail(email);
+
+        if (usuario == null || usuario.getActivo() == 0) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                                 .body("Usuario no encontrado o inactivo");
+        }
+
+        usuario.setContraseña(nuevaPass);
+        usuarioDao.save(usuario);
+
+        return ResponseEntity.ok("Contraseña actualizada correctamente");
     }
 
     @DeleteMapping("/{id}")
@@ -33,18 +67,22 @@ public class UsuarioController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Usuario credenciales) {
-    Usuario usuario = usuarioDao.findByEmailAndContraseña(credenciales.getEmail(), credenciales.getContraseña());
+        Usuario usuario = usuarioDao.findByEmailAndContraseña(
+                credenciales.getEmail(),
+                credenciales.getContraseña()
+        );
 
-    if (usuario == null || usuario.getActivo() == 0) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas o usuario inactivo");
+        if (usuario == null || usuario.getActivo() == 0) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                                 .body("Credenciales inválidas o usuario inactivo");
+        }
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("id_usuario", usuario.getIdUsuario());
+        data.put("nombre", usuario.getNombre());
+        data.put("apellido", usuario.getApellido());
+        data.put("rol", usuario.getRol());
+
+        return ResponseEntity.ok(data);
     }
-
-    Map<String, Object> data = new HashMap<>();
-    data.put("id_usuario", usuario.getIdUsuario());
-    data.put("nombre", usuario.getNombre());
-    data.put("apellido", usuario.getApellido());
-    data.put("rol", usuario.getRol());
-
-    return ResponseEntity.ok(data);
-}
 }
