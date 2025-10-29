@@ -6,12 +6,15 @@ com\example\demo\dao\ProductoDao.class
 com\example\demo\controller\RevendedorController.class
 com\example\demo\dao\ProvinciaDao.class
 com\example\demo\dao\LocalidadDao.class
+com\example\demo\model\Boleta.class
 com\example\demo\model\Provincia.class
+com\example\demo\dao\BoletaDao.class
 com\example\demo\controller\FacturaController.class
 com\example\demo\controller\UsuarioController.class
 com\example\demo\controller\PaisController.class
 com\example\demo\model\Pais.class
 com\example\demo\model\Localidad.class
+com\example\demo\controller\BoletaController.class
 com\example\demo\model\Factura.class
 com\example\demo\dao\FacturaDao.class
 com\example\demo\dao\PaisDao.class
