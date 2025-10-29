@@ -1,228 +1,135 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>Almamia - Revendedores</title>
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-    <!-- Google fonts-->
-    <link href="https://fonts.googleapis.com/css?family=Raleway:100,200,300,400,600,700,800,900" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Lora:400,700" rel="stylesheet" />
-    <!-- Bootstrap core CSS-->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <!-- Theme CSS-->
-    <link href="css/styles.css" rel="stylesheet" />
-
-    <style>
-        h2, h4, label, th, td, p, .nav-link {
-            color: #fff !important;
-        }
-        .nav-tabs .nav-link {
-            color: #f8f9fa;
-            border: none;
-        }
-        .nav-tabs .nav-link.active {
-            background-color: #007bff;
-            color: #fff !important;
-            border-radius: .5rem;
-        }
-        .bg-faded {
-            background-color: rgba(0,0,0,0.6) !important;
-        }
-        .form-control, .form-select {
-            background-color: #f8f9fa;
-        }
-    </style>
-</head>
-<body>
-<header>
-    <h1 class="site-heading text-center text-faded d-none d-lg-block">
-        <span class="site-heading-upper text-primary mb-3">Revendedores</span>
-        <span class="site-heading-lower">Almamia</span>
-    </h1>
-</header>
-
-<!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
-    <div class="container">
-        <a class="navbar-brand text-uppercase fw-bold d-lg-none" href="../index.html">Almamia</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mx-auto">
-                <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="../index.html">Inicio</a></li>
-            <li class="nav-item px-lg-4"><a class="nav-link text-uppercase active" href="pedidos.html">Pedidos</a></li>
-            <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="revendedores.html">Revendedores</a></li>
-            <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="administracion.html">Administración</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
-<section class="page-section">
-    <div class="container text-center">
-
-        <!-- Menú interno -->
-        <ul class="nav nav-tabs justify-content-center mb-4" id="revTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="generar-tab" data-bs-toggle="tab" data-bs-target="#generar" type="button" role="tab">
-                    📝 Generar Pedido
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="mispedidos-tab" data-bs-toggle="tab" data-bs-target="#mispedidos" type="button" role="tab">
-                    📦 Mis Pedidos
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="devoluciones-tab" data-bs-toggle="tab" data-bs-target="#devoluciones" type="button" role="tab">
-                    🔄 Devoluciones
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="cuenta-tab" data-bs-toggle="tab" data-bs-target="#cuenta" type="button" role="tab">
-                    💳 Cuenta Corriente
-                </button>
-            </li>
-        </ul>
-
-        <!-- Contenido de pestañas -->
-        <div class="tab-content" id="revTabsContent">
-
-            <!-- TAB 1: Generar Pedido -->
-            <div class="tab-pane fade show active" id="generar" role="tabpanel" aria-labelledby="generar-tab">
-                <div class="bg-faded p-4 rounded shadow">
-                    <h2 class="text-center mb-4">📝 Generar Pedido</h2>
-                    <button onclick="location.href='pedidos.html'" class="btn btn-success btn-lg">Ir a Pedidos</button>
-                </div>
+<!-- Modal de Boleta -->
+<div class="modal fade" id="boletaModal" tabindex="-1" aria-labelledby="boletaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header" style="background: #2c170f; color: white;">
+                <h5 class="modal-title" id="boletaModalLabel">
+                    <i class="bi bi-receipt"></i> Boleta de Venta
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <div class="modal-body" id="boletaContent">
+                <!-- Contenido de la boleta -->
+                <div class="invoice-container">
+                    <div class="invoice-header">
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="company-name">ALMAMIA</div>
+                                <p class="mb-0">Revendedores de Productos</p>
+                                <p class="mb-0">Copyright © Almamia 2025</p>
+                            </div>
+                            <div class="col-4 text-end">
+                                <div class="invoice-title">BOLETA</div>
+                                <p class="mb-0" id="nroBoleta">N° 000000</p>
+                            </div>
+                        </div>
+                    </div>
 
-            <!-- TAB 2: Mis Pedidos -->
-            <div class="tab-pane fade" id="mispedidos" role="tabpanel" aria-labelledby="mispedidos-tab">
-                <div class="bg-faded p-4 rounded shadow">
-                    <h2 class="text-center mb-4">📦 Mis Pedidos</h2>
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <h5>Datos del Cliente</h5>
+                            <div class="invoice-details">
+                                <p class="mb-1"><strong>Nombre:</strong> <span id="nombreCliente">-</span></p>
+                                <p class="mb-1"><strong>Email:</strong> <span id="emailCliente">-</span></p>
+                                <p class="mb-0"><strong>Teléfono:</strong> <span id="telefonoCliente">-</span></p>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <h5>Información de la Boleta</h5>
+                            <div class="invoice-details">
+                                <p class="mb-1"><strong>Fecha de Emisión:</strong> <span id="fechaEmision">-</span></p>
+                                <p class="mb-1"><strong>N° Pedido:</strong> <span id="nroPedido">-</span></p>
+                                <p class="mb-0"><strong>Estado:</strong> <span id="estadoBoleta" class="badge bg-success">-</span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h5>Detalle del Pedido</h5>
                     <div class="table-responsive">
-                        <table class="table table-bordered text-center align-middle">
-                            <thead class="table-primary text-dark">
+                        <table class="table table-striped table-invoice">
+                            <thead class="table-dark">
                             <tr>
-                                <th>Número de Pedido</th>
-                                <th>Fecha</th>
-                                <th>Total ($)</th>
+                                <th>Producto</th>
+                                <th class="text-center">Cantidad</th>
+                                <th class="text-end">Precio Unit.</th>
+                                <th class="text-end">Subtotal</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr>
-                                <td>001</td>
-                                <td>05/10/2025</td>
-                                <td>7500</td>
-                            </tr>
-                            <tr>
-                                <td>002</td>
-                                <td>02/10/2025</td>
-                                <td>12500</td>
-                            </tr>
+                            <tbody id="detallesTabla">
+                            <!-- Se llenará dinámicamente -->
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </div>
 
-            <!-- TAB 3: Cuenta Corriente -->
-            <div class="tab-pane fade" id="cuenta" role="tabpanel" aria-labelledby="cuenta-tab">
-                <div class="bg-faded p-4 rounded shadow">
-                    <h2 class="text-center mb-4">💳 Cuenta Corriente</h2>
-                    <div class="table-responsive">
-                        <table class="table table-bordered text-center align-middle" id="tablaCuenta">
-                            <thead class="table-primary text-dark">
-                            <tr>
-                                <th>Número de Pedido</th>
-                                <th>Fecha</th>
-                                <th>Total ($)</th>
-                                <th>Estado</th>
-                                <th>Acción</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>001</td>
-                                <td>05/10/2025</td>
-                                <td>7500</td>
-                                <td>Pendiente</td>
-                                <td>
-                                    <button class="btn btn-success btn-sm pagar" data-pedido="001">Pagar</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>002</td>
-                                <td>02/10/2025</td>
-                                <td>12500</td>
-                                <td>Pagado</td>
-                                <td>
-                                    <button class="btn btn-success btn-sm pagar" data-pedido="002" disabled>Pagado</button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                    <div class="row">
+                        <div class="col-md-6"></div>
+                        <div class="col-md-6">
+                            <div class="total-section">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Subtotal:</span>
+                                    <span id="subtotal">$0.00</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>IVA (21%):</span>
+                                    <span id="iva">$0.00</span>
+                                </div>
+                                <hr style="border-color: white;">
+                                <div class="d-flex justify-content-between">
+                                    <strong style="font-size: 1.3rem;">TOTAL:</strong>
+                                    <strong style="font-size: 1.3rem;" id="total">$0.00</strong>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- TAB 4: Devoluciones -->
-            <div class="tab-pane fade" id="devoluciones" role="tabpanel" aria-labelledby="devoluciones-tab">
-                <div class="bg-faded p-4 rounded shadow">
-                    <h2 class="text-center mb-4">🔄 Generar Devolución</h2>
-                    <form id="formDevolucion" class="text-start">
-                        <div class="table-responsive">
-                            <table class="table align-middle text-center" id="tablaDevolucion">
-                                <thead>
-                                <tr>
-                                    <th>Producto</th>
-                                    <th>Cantidad</th>
-                                    <th>Acción</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>
-                                        <select class="form-select productoDevolucion">
-                                            <option value="">Seleccione un producto</option>
-                                            <option value="Shampoo Sólido">Shampoo Sólido</option>
-                                            <option value="Acondicionador">Acondicionador</option>
-                                            <option value="Jabón Natural">Jabón Natural</option>
-                                            <option value="Crema Corporal">Crema Corporal</option>
-                                            <option value="Perfume Vegano">Perfume Vegano</option>
-                                        </select>
-                                    </td>
-                                    <td><input type="number" class="form-control cantidadDevolucion" min="1" value="1"></td>
-                                    <td><button type="button" class="btn btn-danger btn-sm eliminarDevolucion">X</button></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="d-flex justify-content-between mt-3">
-                            <button type="button" id="agregarFilaDevolucion" class="btn btn-primary">Agregar Producto</button>
-                        </div>
-
-                        <div class="text-center mt-4">
-                            <button type="submit" class="btn btn-warning px-5">Generar Pedido de Devolución</button>
-                        </div>
-                    </form>
-                </div>
+            <div class="modal-footer no-print">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="imprimirBoleta()">
+                    <i class="bi bi-printer"></i> Imprimir
+                </button>
             </div>
-
-
         </div>
     </div>
-</section>
+</div>
 
-<footer class="footer text-faded text-center py-5">
-    <div class="container"><p class="m-0 small">Copyright &copy; Almamia 2025</p></div>
-</footer>
+<style>
+    /* Estilos para el modal de boleta */
+    .invoice-container {
+      padding: 20px;
+    }
+    .invoice-header {
+      border-bottom: 3px solid #2c170f;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .company-name {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #2c170f;
+    }
+    .invoice-title {
+      font-size: 1.8rem;
+      color: #666;
+    }
+    .invoice-details {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+    .table-invoice {
+      margin-top: 20px;
+    }
+    .total-section {
+      background: #2c170f;
+      color: white;
+      padding: 20px;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
 
+<<<<<<< Updated upstream
 <!-- JS -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -232,3 +139,28 @@
 <script src="../scripts/devoluciones.js"></script>
 </body>
 </html>
+=======
+    /* Estilos para impresión */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #boletaContent, #boletaContent * {
+        visibility: visible;
+      }
+      #boletaContent {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+      }
+      .modal-header, .modal-footer, .no-print {
+        display: none !important;
+      }
+      .modal-dialog {
+        max-width: 100%;
+        margin: 0;
+      }
+    }
+</style>
+>>>>>>> Stashed changes

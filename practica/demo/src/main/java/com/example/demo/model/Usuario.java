@@ -2,12 +2,18 @@ package com.example.demo.model;
 
 import java.time.LocalDate;
 
+<<<<<<< Updated upstream
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+=======
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
+>>>>>>> Stashed changes
 
 @Entity
 @Table(name = "usuario")
@@ -96,6 +102,7 @@ public class Usuario {
         this.email = email;
     }
 
+<<<<<<< Updated upstream
     public String getTelefono() {
         return telefono;
     }
@@ -127,6 +134,17 @@ public class Usuario {
     public void setActivo(Byte activo) {
         this.activo = activo;
     }
+=======
+    public Domicilio getDomicilio() { return domicilio; }
+    public void setDomicilio(Domicilio domicilio) { this.domicilio = domicilio; }
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private Revendedor revendedor;
+
+    // Getter y Setter
+    public Revendedor getRevendedor() { return revendedor; }
+    public void setRevendedor(Revendedor revendedor) { this.revendedor = revendedor; }
+>>>>>>> Stashed changes
 
     @Override
     public String toString() {
