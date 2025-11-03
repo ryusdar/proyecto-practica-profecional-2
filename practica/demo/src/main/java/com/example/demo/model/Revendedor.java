@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+// ... (imports) ...
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
@@ -11,6 +12,7 @@ public class Revendedor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_revendedor")
     private Long idRevendedor;
+    // ... (resto de atributos, constructores, getters y setters) ...
 
     @Column(name = "nombre")
     private String nombre;

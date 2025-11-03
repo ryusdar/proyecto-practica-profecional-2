@@ -13,15 +13,34 @@ document.addEventListener("DOMContentLoaded", async () => {
   let detallesTemporales = [];
 
   // CARGA DESDE PRODUCTOS
-  const response = await fetch("http://localhost:8080/productos");
-  productos = await response.json();
+  try {
+    const response = await fetch("http://localhost:8080/productos");
+    productos = await response.json();
+    actualizarSelects();
+  } catch (err) {
+    console.error("No se pudieron cargar los productos:", err);
+    alert("Error al cargar productos. Revisa el servidor.");
+    return;
+  }
+
+  // PRODUCTOS A LISTA
+  function actualizarSelects() {
+    document.querySelectorAll("select.producto").forEach(select => {
+      select.innerHTML = '<option value="">Seleccione un producto</option>';
+      productos.forEach(p => {
+        select.innerHTML += `<option value="${p.idProducto}" data-precio="${p.precio}">${p.nombre}</option>`;
+      });
+    });
+  }
 
   // AGREGAR FILA
   btnAgregar.addEventListener("click", () => {
     const fila = document.createElement("tr");
     fila.innerHTML = `
       <td>
-        <select class="form-select producto"></select>
+        <select class="form-select producto">
+          <option value="">Seleccione un producto</option>
+        </select>
       </td>
       <td><input type="number" class="form-control cantidad" value="1" min="1"></td>
       <td><input type="number" class="form-control precio" value="0" readonly></td>
@@ -29,19 +48,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       <td><button type="button" class="btn btn-danger btn-sm eliminar">X</button></td>
     `;
     tablaPedido.appendChild(fila);
-    actualizarSelect(fila); // Solo actualizamos el select de la fila nueva
+    actualizarSelects();
   });
 
-  // FUNCION PARA ACTUALIZAR SOLO EL SELECT NUEVO
-  function actualizarSelect(fila) {
-    const select = fila.querySelector("select.producto");
-    select.innerHTML = '<option value="">Seleccione un producto</option>';
-    productos.forEach(p => {
-      select.innerHTML += `<option value="${p.idProducto}" data-precio="${p.precio}">${p.nombre}</option>`;
-    });
-  }
+  // Añadimos una fila inicial si no hay
+  if (tablaPedido.children.length === 0) btnAgregar.click();
 
-  // TABLA
+  // TABLA - eventos
   tablaPedido.addEventListener("input", e => {
     if (e.target.classList.contains("cantidad")) {
       recalcularFila(e.target.closest("tr"));
@@ -93,7 +106,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       const idProducto = parseInt(fila.querySelector(".producto").value);
       const cantidad = parseInt(fila.querySelector(".cantidad").value);
       const precio = parseFloat(fila.querySelector(".precio").value);
-      const stock = productos.find(p => p.idProducto === idProducto)?.stock || 0;
       const productoObj = productos.find(p => p.idProducto === idProducto);
 
       if (idProducto && cantidad > 0 && productoObj) {
@@ -106,7 +118,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           <tr>
             <td>${productoObj.nombre}</td>
             <td>${cantidad}</td>
-            <td>${stock}</td>
             <td>${precio.toFixed(2)}</td>
             <td>${subtotal.toFixed(2)}</td>
           </tr>`;
@@ -136,13 +147,20 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (response.ok) {
         const data = await response.json();
         alert(`✅ ${data.mensaje}\nNúmero de pedido: ${data.nroPedido}`);
+
+        // Limpiar la tabla de pedido
         tablaPedido.innerHTML = "";
         recalcularTotalGeneral();
         btnAgregar.click();
         bootstrap.Modal.getInstance(document.getElementById("confirmarModal")).hide();
+
+        // Abrir revendedores.html en nueva pestaña y pasar el nroPedido para que lo muestre/hightlightee
+        if (data.nroPedido) {
+          window.open(`revendedores.html?nroPedido=${data.nroPedido}`, "_blank");
+        }
       } else {
         const errorText = await response.text();
-        alert("❌ Error al registrar pedido: " + "revisar el stock de los productos.");
+        alert("❌ Error al registrar pedido: " + errorText);
       }
     } catch (error) {
       console.error("Error al enviar pedido:", error);
@@ -151,4 +169,3 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
 });
-

@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // ... (Código de seguridad y logout, sin cambios) ...
     const usuario = JSON.parse(localStorage.getItem("usuario"));
     const path = window.location.pathname;
 
@@ -18,12 +19,9 @@ document.addEventListener("DOMContentLoaded", () => {
         "/dist/pagos.html"
     ];
     const rutasAdmin = [
-<<<<<<< Updated upstream
-=======
         "/dist/pedidos.html",
         "/dist/revendedores.html",
         "/dist/pagos.html",
->>>>>>> Stashed changes
         "/dist/administracion.html"
     ];
 
@@ -47,33 +45,27 @@ document.addEventListener("click", (e) => {
         window.location.href = "../index.html";
     }
 });
-
 // ========== FUNCIONES PARA BOLETA ==========
 
 // Función para generar y mostrar la boleta
 async function generarYMostrarBoleta(nroPedido) {
   try {
-    // Verificar si ya existe boleta
-    let boleta = await verificarBoletaExistente(nroPedido);
+    const data = await verificarBoletaExistente(nroPedido);
 
-    // Si no existe, generarla
-    if (!boleta) {
-      boleta = await generarBoleta(nroPedido);
+    if (!data) {
+      throw new Error("No se encontró la boleta generada automáticamente.");
     }
 
-    // Cargar los datos en el modal
-    cargarDatosBoleta(boleta);
+    cargarDatosBoleta(data);
 
-    // Mostrar el modal
     const boletaModal = new bootstrap.Modal(document.getElementById('boletaModal'));
     boletaModal.show();
 
-    // Mensaje de éxito
     alert(`✅ Pedido creado correctamente\nNúmero de pedido: ${nroPedido}\n\nSe ha generado la boleta.`);
 
   } catch (error) {
     console.error("Error al generar boleta:", error);
-    alert("⚠️ Pedido creado pero hubo un error al generar la boleta");
+    alert("⚠️ Pedido creado pero hubo un error al cargar la boleta. Verifique el log.");
   }
 }
 
@@ -88,22 +80,6 @@ async function verificarBoletaExistente(nroPedido) {
   } catch (error) {
     return null;
   }
-}
-
-// Generar una nueva boleta
-async function generarBoleta(nroPedido) {
-  const response = await fetch(`http://localhost:8080/boletas/generar/${nroPedido}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" }
-  });
-
-  if (!response.ok) {
-    throw new Error("Error al generar boleta");
-  }
-
-  // Obtener los detalles completos
-  const detallesResponse = await fetch(`http://localhost:8080/boletas/pedido/${nroPedido}`);
-  return await detallesResponse.json();
 }
 
 // Cargar los datos en el modal
@@ -121,7 +97,8 @@ function cargarDatosBoleta(data) {
   // Estado de la boleta
   const estadoBadge = document.getElementById("estadoBoleta");
   estadoBadge.textContent = boleta.estado;
-  estadoBadge.className = `badge ${getEstadoClass(boleta.estado)}`;
+  // Usamos rounded-pill para mejor diseño
+  estadoBadge.className = `badge rounded-pill fw-normal ${getEstadoClass(boleta.estado)}`;
 
   // Información del cliente
   document.getElementById("nombreCliente").textContent = `${usuario.nombre} ${usuario.apellido}`;
@@ -133,10 +110,11 @@ function cargarDatosBoleta(data) {
   tbody.innerHTML = "";
 
   detalles.forEach(detalle => {
+    const nombreProducto = detalle.producto ? detalle.producto.nombre : 'Producto Desconocido';
     const subtotal = detalle.cantidad * detalle.precioUnitario;
     const fila = document.createElement("tr");
     fila.innerHTML = `
-      <td>${detalle.producto.nombre}</td>
+      <td>${nombreProducto}</td>
       <td class="text-center">${detalle.cantidad}</td>
       <td class="text-end">$${detalle.precioUnitario.toFixed(2)}</td>
       <td class="text-end">$${subtotal.toFixed(2)}</td>
@@ -156,8 +134,8 @@ async function verBoleta(nroPedido) {
     const response = await fetch(`http://localhost:8080/boletas/pedido/${nroPedido}`);
 
     if (response.ok) {
-      const boleta = await response.json();
-      cargarDatosBoleta(boleta);
+      const data = await response.json();
+      cargarDatosBoleta(data);
       const boletaModal = new bootstrap.Modal(document.getElementById('boletaModal'));
       boletaModal.show();
     } else {
@@ -193,7 +171,7 @@ function getEstadoClass(estado) {
   }
 }
 
-// Función para imprimir la boleta
+// Función para imprimir la boleta (llamada desde el botón del modal)
 function imprimirBoleta() {
   window.print();
 }
