@@ -17,18 +17,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+// DAOs
 import com.example.demo.dao.DetallePedidoDao;
 import com.example.demo.dao.PedidoDao;
 import com.example.demo.dao.ProductoDao;
 import com.example.demo.dao.UsuarioDao;
+import com.example.demo.dao.BoletaDao; // <-- 1. IMPORTAR DAO DE BOLETA
+
+// Modelos
 import com.example.demo.model.DetallePedido;
 import com.example.demo.model.Pedido;
 import com.example.demo.model.Producto;
 import com.example.demo.model.Usuario;
+import com.example.demo.model.Boleta;   // <-- 2. IMPORTAR MODELO BOLETA
 
 @RestController
 @RequestMapping("/pedidos")
-@CrossOrigin(origins = "*") 
+@CrossOrigin(origins = "*")
 public class PedidoController {
 
     @Autowired
@@ -43,6 +48,9 @@ public class PedidoController {
     @Autowired
     private ProductoDao productoDao;
 
+    @Autowired
+    private BoletaDao boletaDao; // <-- 3. INYECTAR DAO DE BOLETA
+
     // CREAR PEDIDO
     @PostMapping("/crear")
     public ResponseEntity<?> crearPedido(@RequestBody Map<String, Object> datos) {
@@ -55,9 +63,10 @@ public class PedidoController {
         Pedido pedido = new Pedido();
         pedido.setFecha(LocalDate.now());
         pedido.setUsuario(usuario);
-        pedido = pedidoDao.save(pedido);
+        pedido = pedidoDao.save(pedido); // Se guarda el pedido para obtener el ID
 
         List<DetallePedido> detalles = new ArrayList<>();
+        Double totalPedido = 0.0; // <-- 4. VARIABLE PARA ACUMULAR EL TOTAL
 
         for (Map<String, Object> item : items) {
             Long idProducto = Long.valueOf(item.get("idProducto").toString());
@@ -70,6 +79,7 @@ public class PedidoController {
 
             // VERIFICACIÓN STOCK
             if (producto.getStock() < cantidad) {
+                // Considera usar @Transactional para revertir el pedido si el stock falla
                 throw new RuntimeException("Stock insuficiente para el producto: " + producto.getNombre());
             }
 
@@ -82,7 +92,34 @@ public class PedidoController {
             detallePedidoDao.save(detalle);
 
             detalles.add(detalle);
+
+            totalPedido += (precioUnitario * cantidad); // <-- 5. ACUMULAR TOTAL
         }
+
+        // --- 6. CREACIÓN DE LA BOLETA ---
+        try {
+            // Asumimos un IVA del 19% (0.19). Ajusta esta tasa según tu necesidad.
+            final Double IVA_TASA = 0.19;
+            Double subtotal = totalPedido / (1 + IVA_TASA);
+            Double iva = totalPedido - subtotal;
+
+            Boleta boleta = new Boleta(
+                    pedido,             // El pedido recién creado
+                    LocalDate.now(),    // Fecha de emisión
+                    subtotal,           // Subtotal calculado
+                    iva,                // IVA calculado
+                    totalPedido,        // Total del pedido
+                    "EMITIDA"           // Estado inicial
+            );
+
+            boletaDao.save(boleta); // Guardamos la boleta
+
+        } catch (Exception e) {
+            // Loggear el error. El pedido se creó, pero la boleta falló.
+            System.err.println("Error al crear la boleta para el pedido " + pedido.getNroPedido() + ": " + e.getMessage());
+            // No lanzamos excepción para no fallar la creación del pedido
+        }
+        // --- FIN CREACIÓN BOLETA ---
 
         Map<String, Object> respuesta = new HashMap<>();
         respuesta.put("mensaje", "Pedido creado correctamente");
