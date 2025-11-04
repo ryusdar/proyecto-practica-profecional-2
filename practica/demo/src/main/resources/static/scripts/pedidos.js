@@ -15,26 +15,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   // CARGA DESDE PRODUCTOS
   const response = await fetch("http://localhost:8080/productos");
   productos = await response.json();
-  actualizarSelects();
-
-  // PRODUCTOS A LISTA
-  function actualizarSelects() {
-    document.querySelectorAll("select.producto").forEach(select => {
-      select.innerHTML = '<option value="">Seleccione un producto</option>';
-      productos.forEach(p => {
-        select.innerHTML += `<option value="${p.idProducto}" data-precio="${p.precio}">${p.nombre}</option>`;
-      });
-    });
-  }
 
   // AGREGAR FILA
   btnAgregar.addEventListener("click", () => {
     const fila = document.createElement("tr");
     fila.innerHTML = `
       <td>
-        <select class="form-select producto">
-          <option value="">Seleccione un producto</option>
-        </select>
+        <select class="form-select producto"></select>
       </td>
       <td><input type="number" class="form-control cantidad" value="1" min="1"></td>
       <td><input type="number" class="form-control precio" value="0" readonly></td>
@@ -42,8 +29,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       <td><button type="button" class="btn btn-danger btn-sm eliminar">X</button></td>
     `;
     tablaPedido.appendChild(fila);
-    actualizarSelects();
+    actualizarSelect(fila); // Solo actualizamos el select de la fila nueva
   });
+
+  // FUNCION PARA ACTUALIZAR SOLO EL SELECT NUEVO
+  function actualizarSelect(fila) {
+    const select = fila.querySelector("select.producto");
+    select.innerHTML = '<option value="">Seleccione un producto</option>';
+    productos.forEach(p => {
+      select.innerHTML += `<option value="${p.idProducto}" data-precio="${p.precio}">${p.nombre}</option>`;
+    });
+  }
 
   // TABLA
   tablaPedido.addEventListener("input", e => {
