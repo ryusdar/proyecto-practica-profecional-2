@@ -38,9 +38,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const fila = document.createElement("tr");
     fila.innerHTML = `
       <td>
-        <select class="form-select producto">
-          <option value="">Seleccione un producto</option>
-        </select>
+        <select class="form-select producto"></select>
       </td>
       <td><input type="number" class="form-control cantidad" value="1" min="1"></td>
       <td><input type="number" class="form-control precio" value="0" readonly></td>
@@ -50,6 +48,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     tablaPedido.appendChild(fila);
     actualizarSelects();
   });
+
+  // FUNCION PARA ACTUALIZAR SOLO EL SELECT NUEVO
+  function actualizarSelect(fila) {
+    const select = fila.querySelector("select.producto");
+    select.innerHTML = '<option value="">Seleccione un producto</option>';
+    productos.forEach(p => {
+      select.innerHTML += `<option value="${p.idProducto}" data-precio="${p.precio}">${p.nombre}</option>`;
+    });
+  }
 
   // Añadimos una fila inicial si no hay
   if (tablaPedido.children.length === 0) btnAgregar.click();
