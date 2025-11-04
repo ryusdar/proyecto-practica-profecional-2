@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -16,185 +17,396 @@
     <link href="css/styles.css" rel="stylesheet" />
 
     <style>
-        h2, h4, label, th, td, p, .nav-link {
+        h2,
+        h4,
+        label,
+        th,
+        td,
+        p,
+        .nav-link {
             color: #fff !important;
         }
+
         .nav-tabs .nav-link {
             color: #f8f9fa;
             border: none;
         }
+
         .nav-tabs .nav-link.active {
             background-color: #007bff;
             color: #fff !important;
             border-radius: .5rem;
         }
+
         .bg-faded {
-            background-color: rgba(0,0,0,0.6) !important;
+            background-color: rgba(0, 0, 0, 0.6) !important;
         }
-        .form-control, .form-select {
+
+        .form-control,
+        .form-select {
             background-color: #f8f9fa;
         }
+
         .filter-input {
             width: 100%;
             margin-bottom: 5px;
+        }
+
+        .modal-content {
+            background-color: #f8f9fa !important;
+            /* Fondo blanco */
+            color: #000 !important;
+            /* Texto negro */
+        }
+
+        .modal-header {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .modal-title {
+            font-weight: bold;
+        }
+
+        .form-label {
+            font-weight: 500;
+        }
+
+        #modalUsuario label,
+        #modalUsuario .form-label,
+        #modalUsuario .modal-title,
+        #modalUsuario p,
+        #modalUsuario span {
+            color: #000 !important;
+        }
+
+        #modalUsuario .modal-content {
+            background-color: #f8f9fa !important;
+            color: #000 !important;
+        }
+
+        #modalUsuario .form-control,
+        #modalUsuario .form-select {
+            color: #000 !important;
+            background-color: #fff !important;
+        }
+
+        #userMenuButton {
+            background-color: #666d2b;
+            color: #000000;
+            border: 2px solid #0a0a0a;
+            transition: 0.3s;
+        }
+
+        #userMenuButton:hover {
+            background-color: #666d2b;
+            color: #fff;
         }
     </style>
 </head>
 
 <body>
-<header>
-    <h1 class="site-heading text-center text-faded d-none d-lg-block">
-        <span class="site-heading-upper text-primary mb-3">Administración</span>
-        <span class="site-heading-lower">Almamia</span>
-    </h1>
-</header>
-
-<nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
-    <div class="container">
-        <a class="navbar-brand text-uppercase fw-bold d-lg-none" href="index.html">Almamia</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mx-auto">
-                <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="../index.html">Inicio</a></li>
-                <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="pedidos.html">Pedidos</a></li>
-                <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="revendedores.html">Revendedores</a></li>
-                <li class="nav-item px-lg-4"><a class="nav-link text-uppercase active" href="administracion.html">Administración</a></li>
+    <!-- Menú de usuario -->
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+        <div class="dropdown">
+            <button class="btn btn-light rounded-circle d-flex align-items-center justify-content-center"
+                id="userMenuButton" data-bs-toggle="dropdown" aria-expanded="false"
+                style="width: 45px; height: 45px; font-weight: bold;">
+                U
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end text-center" aria-labelledby="userMenuButton">
+                <li><span class="dropdown-item-text fw-bold" id="nombreUsuarioMenu">Usuario</span></li>
+                <li>
+                    <hr class="dropdown-divider" />
+                </li>
+                <li><a class="dropdown-item text-danger fw-bold" href="#" id="logoutBtn">Cerrar sesión</a></li>
             </ul>
         </div>
     </div>
-</nav>
+    <header>
+        <h1 class="site-heading text-center text-faded d-none d-lg-block">
 
-<section class="page-section">
-    <div class="container text-center">
+            <span class="site-heading-upper text-primary mb-3">Administración</span>
+            <span class="site-heading-lower">Almamia</span>
+        </h1>
+    </header>
 
-        <!-- Menú interno -->
-        <ul class="nav nav-tabs justify-content-center mb-4" id="adminTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="stock-tab" data-bs-toggle="tab" data-bs-target="#stock" type="button" role="tab">
-                    📦 Control de Stock
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="factura-tab" data-bs-toggle="tab" data-bs-target="#factura" type="button" role="tab">
-                    🧾 Generación de Boletas / Facturas
-                </button>
-            </li>
-        </ul>
+    <nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand text-uppercase fw-bold d-lg-none" href="index.html">Almamia</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mx-auto">
 
-        <div class="tab-content" id="adminTabsContent">
 
-            <!-- TAB 1: Control de Stock -->
-            <div class="tab-pane fade show active" id="stock" role="tabpanel" aria-labelledby="stock-tab">
-                <div class="bg-faded p-4 rounded shadow">
-                    <h2 class="text-center mb-4">📦 Control de Stock</h2>
+                    <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="../index.html">Inicio</a></li>
+                    <li class="nav-item px-lg-4"><a class="nav-link text-uppercase" href="pedidos.html">Pedidos</a></li>
+                    <li class="nav-item px-lg-4"><a class="nav-link text-uppercase"
+                            href="revendedores.html">Revendedores</a></li>
+                    <li class="nav-item px-lg-4"><a class="nav-link text-uppercase active"
+                            href="administracion.html">Administración</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-                    <div class="row mb-2">
-                        <div class="col-md-6">
-                            <input type="text" id="filterInsumo" class="form-control filter-input" placeholder="Filtrar por Insumo...">
+    <section class="page-section">
+        <div class="container text-center">
+
+            <!-- Menú interno -->
+            <ul class="nav nav-tabs justify-content-center mb-4" id="adminTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="stock-tab" data-bs-toggle="tab" data-bs-target="#stock"
+                        type="button" role="tab">
+                        📦 Control de Stock
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="factura-tab" data-bs-toggle="tab" data-bs-target="#factura"
+                        type="button" role="tab">
+                        🧾 Generación de Boletas / Facturas
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="usuarios-tab" data-bs-toggle="tab" data-bs-target="#usuarios"
+                        type="button" role="tab">
+                        👥 Usuarios
+                    </button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="adminTabsContent">
+
+                <!-- TAB 1: Control de Stock -->
+                <div class="tab-pane fade show active" id="stock" role="tabpanel" aria-labelledby="stock-tab">
+                    <div class="bg-faded p-4 rounded shadow">
+                        <h2 class="text-center mb-4">📦 Control de Stock</h2>
+
+                        <div class="row mb-2">
+                            <div class="col-md-6">
+                                <input type="text" id="filterInsumo" class="form-control filter-input"
+                                    placeholder="Filtrar por Insumo...">
+                            </div>
+                            <div class="col-md-6 d-flex">
+                                <input type="number" id="filterCantidadMin" class="form-control me-1"
+                                    placeholder="Cantidad mínima">
+                                <input type="number" id="filterCantidadMax" class="form-control"
+                                    placeholder="Cantidad máxima">
+                            </div>
                         </div>
-                        <div class="col-md-6 d-flex">
-                            <input type="number" id="filterCantidadMin" class="form-control me-1" placeholder="Cantidad mínima">
-                            <input type="number" id="filterCantidadMax" class="form-control" placeholder="Cantidad máxima">
+
+                        <table class="table table-bordered text-center align-middle" id="tablaStock">
+                            <thead class="table-primary text-dark">
+                                <tr>
+                                    <th>Insumo</th>
+                                    <th>Cantidad Disponible</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+
+                        <div class="text-center mt-3">
+                            <button id="pedidoAuto" class="btn btn-success">Generar Pedido Automático de
+                                Insumos</button>
+                        </div>
+                        <div id="pedidoEditable" class="mt-4" style="display:none;">
+                            <h4 class="text-center mb-3">📝 Completar cantidades a pedir</h4>
+                            <div class="table-responsive">
+                                <table class="table table-bordered text-center align-middle" id="tablaPedidoEditable">
+                                    <thead class="table-primary text-dark">
+                                        <tr>
+                                            <th>Producto</th>
+                                            <th>Stock Actual</th>
+                                            <th>Cantidad a Pedir</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                            <div class="text-center mt-3">
+                                <button id="confirmarPedido" class="btn btn-primary">Confirmar Pedido y Generar
+                                    PDF</button>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <table class="table table-bordered text-center align-middle" id="tablaStock">
-                        <thead class="table-primary text-dark">
-                        <tr>
-                            <th>Insumo</th>
-                            <th>Cantidad Disponible</th>
-                            <th>Punto de Reposición</th>
-                            <th>Acción</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                                              </tbody>
-                    </table>
+                <!-- TAB 2: Facturación -->
+                <div class="tab-pane fade" id="factura" role="tabpanel" aria-labelledby="factura-tab">
+                    <div class="bg-faded p-4 rounded shadow">
+                        <h2 class="text-center mb-4">🧾 Generación de Boletas / Facturas</h2>
 
-                    <div class="text-center mt-3">
-                        <button id="pedidoAuto" class="btn btn-success">Generar Pedido Automático de Insumos</button>
+                        <form id="formFactura" class="p-3 rounded">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Cliente</label>
+                                    <select class="form-select" id="cliente" required>
+                                        <option value="">Seleccione cliente...</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Fecha</label>
+                                    <input type="date" class="form-control" id="fecha" required />
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table text-center align-middle" id="tablaFactura">
+                                    <thead class="table-primary" style="color: #000 !important;">
+                                        <tr>
+                                            <th>Producto</th>
+                                            <th>Cantidad</th>
+                                            <th>Precio Unitario ($)</th>
+                                            <th>Total ($)</th>
+                                            <th>Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <select class="form-select producto" onchange="actualizarPrecio(this)">
+                                                    <option value="">Seleccione producto...</option>
+
+                                                </select>
+                                            </td>
+                                            <td><input type="number" class="form-control cantidad" value="1" min="1" />
+                                            </td>
+                                            <td><input type="number" class="form-control precio text-center" value="0"
+                                                    min="0" step="0.01" readonly inputmode="decimal" /></td>
+                                            <td class="total">0.00</td>
+                                            <td><button type="button" class="btn btn-danger btn-sm eliminar">X</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="d-flex justify-content-between mt-3">
+                                <button type="button" id="agregarFila" class="btn btn-primary">Agregar Producto</button>
+                                <h4>Total: $<span id="granTotal">0.00</span></h4>
+                            </div>
+
+                            <div class="text-center mt-4">
+                                <button type="submit" class="btn btn-success px-5">Generar Boleta</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- TAB 3: Usuarios -->
+                <div class="tab-pane fade" id="usuarios" role="tabpanel" aria-labelledby="usuarios-tab">
+                    <div class="bg-faded p-4 rounded shadow">
+                        <h2 class="text-center mb-4">👥 Gestión de Usuarios</h2>
+
+                        <div class="text-end mb-3">
+                            <button id="btnNuevoUsuario" class="btn btn-success">➕ Nuevo Usuario</button>
+                        </div>
+
+                        <table class="table table-bordered text-center align-middle" id="tablaUsuarios">
+                            <thead class="table-primary text-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre y Apellido</th>
+                                    <th>Email</th>
+                                    <th>Teléfono</th>
+                                    <th>Rol</th>
+                                    <th>Fecha Alta</th>
+                                    <th>Activo</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <!-- TAB 2: Facturación -->
-            <div class="tab-pane fade" id="factura" role="tabpanel" aria-labelledby="factura-tab">
-                <div class="bg-faded p-4 rounded shadow">
-                    <h2 class="text-center mb-4">🧾 Generación de Boletas / Facturas</h2>
+    <!-- MODAL USUARIO -->
+    <div class="modal fade" id="modalUsuario" tabindex="-1" aria-labelledby="modalUsuarioLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalUsuarioLabel">Editar Usuario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formUsuario">
+                        <input type="hidden" id="usuarioId">
 
-                    <form id="formFactura" class="p-3 rounded">
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Cliente</label>
-                                <select class="form-select" id="cliente" required>
-                                    <option value="">Seleccione cliente...</option>
-                                    <option value="Charly Garcia">Charly Garcia</option>
-                                    <option value="Pedro Aznar">Pedro Aznar</option>
-                                    <option value="Lito Vitale">Lito Vitale</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Fecha</label>
-                                <input type="date" class="form-control" id="fecha" required />
-                            </div>
+                        <div class="mb-3">
+                            <label class="form-label">Nombre</label>
+                            <input type="text" id="nombreUsuario" class="form-control" required>
                         </div>
 
-                        <div class="table-responsive">
-                            <table class="table text-center align-middle" id="tablaFactura">
-                                <thead class="table-primary" style="color: #000 !important;">
-                                <tr>
-                                    <th>Producto</th>
-                                    <th>Cantidad</th>
-                                    <th>Precio Unitario ($)</th>
-                                    <th>Total ($)</th>
-                                    <th>Acción</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>
-                                        <select class="form-select producto" onchange="actualizarPrecio(this)">
-                                            <option value="">Seleccione producto...</option>
-                                            <option value="Shampoo Sólido">Shampoo Sólido</option>
-                                            <option value="Acondicionador">Acondicionador</option>
-                                            <option value="Jabón Natural">Jabón Natural</option>
-                                        </select>
-                                    </td>
-                                    <td><input type="number" class="form-control cantidad" value="1" min="1" /></td>
-                                    <td><input type="number" class="form-control precio text-center" value="0" min="0" step="0.01" readonly inputmode="decimal" style="appearance: textfield; -moz-appearance: textfield; -webkit-appearance: textfield;" /></td>
-                                    <td class="total">0.00</td>
-                                    <td><button type="button" class="btn btn-danger btn-sm eliminar">X</button></td>
-                                </tr>
-                                </tbody>
-                            </table>
+                        <div class="mb-3">
+                            <label class="form-label">Apellido</label>
+                            <input type="text" id="apellidoUsuario" class="form-control" required>
                         </div>
 
-                        <div class="d-flex justify-content-between mt-3">
-                            <button type="button" id="agregarFila" class="btn btn-primary">Agregar Producto</button>
-                            <h4>Total: $<span id="granTotal">0.00</span></h4>
+                        <div class="mb-3">
+                            <label class="form-label">E-mail</label>
+                            <input type="email" id="emailUsuario" class="form-control" required>
                         </div>
 
-                        <div class="text-center mt-4">
-                            <button type="submit" class="btn btn-success px-5">Generar Boleta</button>
+                        <div class="mb-3">
+                            <label class="form-label">Teléfono</label>
+                            <input type="text" id="telefonoUsuario" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Rol</label>
+                            <select id="rolUsuario" class="form-select" required>
+                                <option value="1">Administrador</option>
+                                <option value="2">Revendedor</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Activo</label>
+                            <select id="activoUsuario" class="form-select">
+                                <option value="1">Activo</option>
+                                <option value="0">Inactivo</option>
+                            </select>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success px-4">Guardar cambios</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-</section>
 
-<footer class="footer text-faded text-center py-5">
-    <div class="container"><p class="m-0 small">Copyright &copy; Almamia 2025</p></div>
-</footer>
+    <footer class="footer text-faded text-center py-5">
+        <div class="container">
+            <p class="m-0 small">Copyright &copy; Almamia 2025</p>
+        </div>
+    </footer>
 
-<!-- JS -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="../scripts/seguridad.js"></script>
-<script src="../scripts/administracion.js"></script>
+    <!-- JS -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="liveToast" class="toast align-items-center border-0" role="alert" aria-live="assertive"
+            aria-atomic="true">
+            <div id="toastHeader" class="toast-header bg-primary text-white">
+                <strong class="me-auto">Almamia</strong>
+                <button type="button" class="btn-close btn-close-white ms-2 mb-1" data-bs-dismiss="toast"
+                    aria-label="Cerrar"></button>
+            </div>
+            <div class="toast-body" id="toastMessage">Mensaje de ejemplo</div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../scripts/seguridad.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="../scripts/administracion.js"></script>
 </body>
+
 </html>

@@ -1,8 +1,5 @@
 package com.example.demo.model;
-
 import java.time.LocalDate;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -40,7 +37,6 @@ public class Usuario {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_domicilio", referencedColumnName = "id_domicilio")
-    @JsonBackReference
     private Domicilio domicilio;
 
 
