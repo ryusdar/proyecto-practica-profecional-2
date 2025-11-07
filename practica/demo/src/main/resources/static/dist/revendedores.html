@@ -106,7 +106,7 @@
                 <div class="bg-faded p-4 rounded shadow">
                     <h2 class="text-center mb-4">📦 Mis Pedidos</h2>
                     <div class="table-responsive">
-                        <table class="table table-bordered text-center align-middle">
+                        <table id="tablaPedidos" class="table table-bordered text-center align-middle">
                             <thead class="table-primary text-dark">
                             <tr>
                                 <th>Número de Pedido</th>
@@ -115,16 +115,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>001</td>
-                                <td>05/10/2025</td>
-                                <td>7500</td>
-                            </tr>
-                            <tr>
-                                <td>002</td>
-                                <td>02/10/2025</td>
-                                <td>12500</td>
-                            </tr>
+                            
                             </tbody>
                         </table>
                     </div>
@@ -147,24 +138,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>001</td>
-                                <td>05/10/2025</td>
-                                <td>7500</td>
-                                <td>Pendiente</td>
-                                <td>
-                                    <button class="btn btn-success btn-sm pagar" data-pedido="001">Pagar</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>002</td>
-                                <td>02/10/2025</td>
-                                <td>12500</td>
-                                <td>Pagado</td>
-                                <td>
-                                    <button class="btn btn-success btn-sm pagar" data-pedido="002" disabled>Pagado</button>
-                                </td>
-                            </tr>
+                           
                             </tbody>
                         </table>
                     </div>
@@ -185,20 +159,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>
-                                        <select class="form-select productoDevolucion">
-                                            <option value="">Seleccione un producto</option>
-                                            <option value="Shampoo Sólido">Shampoo Sólido</option>
-                                            <option value="Acondicionador">Acondicionador</option>
-                                            <option value="Jabón Natural">Jabón Natural</option>
-                                            <option value="Crema Corporal">Crema Corporal</option>
-                                            <option value="Perfume Vegano">Perfume Vegano</option>
-                                        </select>
-                                    </td>
-                                    <td><input type="number" class="form-control cantidadDevolucion" min="1" value="1"></td>
-                                    <td><button type="button" class="btn btn-danger btn-sm eliminarDevolucion">X</button></td>
-                                </tr>
+                               
                                 </tbody>
                             </table>
                         </div>
