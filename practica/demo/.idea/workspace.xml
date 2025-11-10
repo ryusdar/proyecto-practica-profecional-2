@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="3a540161-7229-40c2-9330-b3887812cff9" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <favorite-branches>
+      <branch-storage>
+        <map>
+          <entry type="REMOTE">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$/../.." source="origin/joaquin" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </favorite-branches>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/../.." value="joaquin" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+    <option name="UPDATE_TYPE" value="REBASE" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Big3ppvv&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/ryusdar/proyecto-practica-profecional-2.git&quot;,
+    &quot;accountId&quot;: &quot;ff1be4e4-f90b-4c95-8623-891efbbc9540&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="35IKnOPXvz7kbUtxBBpx27hw1Pa" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Maven.demo [org.springframework.boot:spring-boot-maven-plugin:3.5.6:run].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Dell/Desktop/proyecto-practica-profecional-2/practica/demo"
+  }
+}]]></component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3a540161-7229-40c2-9330-b3887812cff9" name="Changes" comment="" />
+      <created>1762792314937</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1762792314937</updated>
+    </task>
+    <servers />
+  </component>
+</project>
