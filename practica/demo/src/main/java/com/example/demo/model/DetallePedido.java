@@ -2,6 +2,9 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 
+// IMPORTACIÓN NUEVA
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "detalle_pedido")
 public class DetallePedido {
@@ -10,6 +13,8 @@ public class DetallePedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // ANOTACIÓN NUEVA
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "nro_pedido", referencedColumnName = "nro_pedido", nullable = false)
     private Pedido pedido;
