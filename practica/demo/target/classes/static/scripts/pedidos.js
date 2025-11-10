@@ -163,7 +163,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // Abrir revendedores.html en nueva pestaña y pasar el nroPedido para que lo muestre/hightlightee
         if (data.nroPedido) {
-          window.open(`revendedores.html?nroPedido=${data.nroPedido}`, "_blank");
+          
         }
       } else {
         const errorText = await response.text();
