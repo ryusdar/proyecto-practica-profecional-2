@@ -49,4 +49,13 @@ public class BoletaController {
 
         return ResponseEntity.ok(responseData);
     }
+
+    /**
+     * Obtiene todas las boletas generadas.
+     * (NUEVO MÉTODO)
+     */
+    @GetMapping
+    public List<Boleta> getAllBoletas() {
+        return boletaDao.findAll();
+    }
 }
