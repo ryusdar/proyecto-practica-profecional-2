@@ -1,8 +1,12 @@
 package com.example.demo.model;
 
 // ... (imports) ...
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "revendedor")
@@ -26,52 +30,16 @@ public class Revendedor {
     @Column(name = "id_domicilio")
     private Long idDomicilio;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     public Revendedor() {}
 
     // Constructor con parámetros
-    public Revendedor(String nombre, String apellido, String telefono,
-                      Long idDomicilio, Usuario usuario) {
-
+    public Revendedor(String nombre, String apellido, String telefono, Long idDomicilio) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
-    }
-    public int getIdRevendedor() {
-        return idRevendedor;
-    }
-
-    public void setIdRevendedor(int idRevendedor) {
-        this.idRevendedor = idRevendedor;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
-    public int getIdDomicilio() {
-        return idDomicilio;
-    }
-
-    public void setIdDomicilio(int idDomicilio) {
-
         this.idDomicilio = idDomicilio;
-        this.usuario = usuario;
+        
     }
-
     // Getters y Setters
     public Long getIdRevendedor() { return idRevendedor; }
     public void setIdRevendedor(Long idRevendedor) { this.idRevendedor = idRevendedor; }
@@ -88,8 +56,7 @@ public class Revendedor {
     public Long getIdDomicilio() { return idDomicilio; }
     public void setIdDomicilio(Long idDomicilio) { this.idDomicilio = idDomicilio; }
 
-    public Usuario getUsuario() { return usuario; }
-    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
+
 
     @Override
     public String toString() {
@@ -99,7 +66,6 @@ public class Revendedor {
                 ", apellido='" + apellido + '\'' +
                 ", telefono='" + telefono + '\'' +
                 ", idDomicilio=" + idDomicilio +
-                ", usuarioId=" + (usuario != null ? usuario.getIdUsuario() : null) +
                 '}';
     }
 }

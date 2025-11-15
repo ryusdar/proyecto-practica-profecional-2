@@ -41,7 +41,7 @@ public class Provincia {
     public Provincia() {
     }
 
-    public Provincia(Long idProvincia, String nombre, Pais pais) {
+    public Provincia(int idProvincia, String nombre, Pais pais) {
         this.idProvincia = idProvincia;
         this.nombre = nombre;
         this.pais = pais;

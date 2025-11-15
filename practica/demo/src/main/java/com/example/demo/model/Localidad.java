@@ -1,7 +1,9 @@
 package com.example.demo.model;
 import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,7 +41,7 @@ public class Localidad {
     public Localidad() {
     }
 
-    public Localidad(Long idLocalidad, String nombre, Provincia provincia) {
+    public Localidad(int idLocalidad, String nombre, Provincia provincia) {
         this.idLocalidad = idLocalidad;
         this.nombre = nombre;
         this.provincia = provincia;

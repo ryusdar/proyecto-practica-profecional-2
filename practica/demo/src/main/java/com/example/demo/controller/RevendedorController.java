@@ -30,8 +30,7 @@ public class RevendedorController {
 
     // Crea un revendedor y lo asocia a un usuario
     @PostMapping("/crear/{idUsuario}")
-    public ResponseEntity<?> crearRevendedor(@PathVariable Long idUsuario,
-                                             @RequestBody Revendedor revendedor) {
+    public ResponseEntity<?> crearRevendedor(@PathVariable Long idUsuario,@RequestBody Revendedor revendedor) {
 
         // Busca el usuario por ID
         Usuario usuario = usuarioDao.findById(idUsuario).orElse(null);
