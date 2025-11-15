@@ -21,16 +21,19 @@ public class ProvinciaController {
     @Autowired
     private ProvinciaDao provinciaDao;
 
+    //LISTAR PROVINCIAS
     @GetMapping
     public List<Provincia> getProvincias() {
         return provinciaDao.findAll();
     }
 
+    // CARGAR PROVINCIAS
     @PostMapping
     public Provincia registrar(@RequestBody Provincia provincia) {
         return provinciaDao.save(provincia);
     }
 
+    //ELIMINAR PROVINCIAS
     @DeleteMapping("/{id}")
     public void eliminar(@PathVariable int id) {
         provinciaDao.deleteById(id);

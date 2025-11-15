@@ -1,34 +1,79 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.dao.RevendedorDao;
+import com.example.demo.dao.UsuarioDao;
 import com.example.demo.model.Revendedor;
+import com.example.demo.model.Usuario;
+
+import java.util.List;
+
 @RestController
+@RequestMapping("/revendedores")
 public class RevendedorController {
-      @Autowired
+
+    @Autowired
     private RevendedorDao revendedorDao;
 
-    @GetMapping("api/revendedor")
-    public List<Revendedor> getProducto() {
+    @Autowired
+    private UsuarioDao usuarioDao;
+
+    // Obtiene todos los revendedores
+    @GetMapping
+    public List<Revendedor> getRevendedores() {
         return revendedorDao.findAll();
     }
 
-    @PostMapping("api/revendedor")
-    public void registrar(@RequestBody Revendedor revendedor) {
-        revendedorDao.save(revendedor);
+    // Crea un revendedor y lo asocia a un usuario
+    @PostMapping("/crear/{idUsuario}")
+    public ResponseEntity<?> crearRevendedor(@PathVariable Long idUsuario,
+                                             @RequestBody Revendedor revendedor) {
+
+        // Busca el usuario por ID
+        Usuario usuario = usuarioDao.findById(idUsuario).orElse(null);
+
+        // Si el usuario no existe, devuelve un error 404
+        if (usuario == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Usuario no encontrado");
+        }
+
+        // Asocia el usuario al revendedor y lo guarda
+        revendedor.setUsuario(usuario);
+        Revendedor nuevoRevendedor = revendedorDao.save(revendedor);
+
+        // Devuelve el revendedor creado con un estado 201 (CREATED)
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoRevendedor);
     }
 
-    @DeleteMapping("api/revendedor/{id}")
-    public void eliminar(@PathVariable int id) {
+    // Obtiene el perfil de revendedor de un usuario específico
+    @GetMapping("/usuario/{idUsuario}")
+    public ResponseEntity<?> getRevendedorPorUsuario(@PathVariable Long idUsuario) {
+        Revendedor revendedor = revendedorDao.findByUsuarioIdUsuario(idUsuario);
+
+        // Si no se encuentra, devuelve 404
+        if (revendedor == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Revendedor no encontrado para este usuario");
+        }
+
+        return ResponseEntity.ok(revendedor);
+    }
+
+    // Elimina un revendedor por su ID
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminarRevendedor(@PathVariable Long id) {
+        // Valida si existe antes de borrar (buena práctica)
+        if (!revendedorDao.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Revendedor no encontrado con ID: " + id);
+        }
+
         revendedorDao.deleteById(id);
+        return ResponseEntity.ok("Revendedor eliminado correctamente");
     }
 }

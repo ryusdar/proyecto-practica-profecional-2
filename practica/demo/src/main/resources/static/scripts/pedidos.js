@@ -1,123 +1,178 @@
-$(document).ready(function() {
-  console.log("DOM cargado");
-  console.log("Botón encontrado:", $("#pedido").length);
-});
+document.addEventListener("DOMContentLoaded", async () => {
+  const tablaPedido = document.querySelector("#tablaPedido tbody");
+  const btnAgregar = document.getElementById("agregarFila");
+  const btnEnviar = document.getElementById("pedido");
+  const totalGeneral = document.getElementById("totalGeneral");
+  const idUsuario = localStorage.getItem("id_usuario") || 1;
 
-const preciosProductos = {
-  "Shampoo Sólido": 2500,
-  "Acondicionador": 2700,
-  "Jabón Natural": 1800,
-  "Crema Corporal": 3200,
-  "Perfume Vegano": 4100,
-};
+  const tablaConfirmacion = document.getElementById("tablaConfirmacion");
+  const totalConfirmacion = document.getElementById("totalConfirmacion");
+  const btnConfirmar = document.getElementById("confirmarPedido");
 
-function inicializarSelect2() {
-  $(".producto").select2({
-    placeholder: "Buscar producto...",
-    allowClear: true,
-    width: "100%",
-  });
-}
+  let productos = [];
+  let detallesTemporales = [];
 
-function actualizarTotales() {
-  let totalGeneral = 0;
-  $("#tablaPedido tbody tr").each(function () {
-    const cantidad = parseFloat($(this).find(".cantidad").val()) || 0;
-    const precio = parseFloat($(this).find(".precio").val()) || 0;
-    const total = cantidad * precio;
-    $(this).find(".total").text(total.toFixed(2));
-    totalGeneral += total;
-  });
-  $("#totalGeneral").text(totalGeneral.toFixed(2));
-}
+  // CARGA DESDE PRODUCTOS
+  try {
+    const response = await fetch("http://localhost:8080/productos");
+    productos = await response.json();
+    actualizarSelects();
+  } catch (err) {
+    console.error("No se pudieron cargar los productos:", err);
+    alert("Error al cargar productos. Revisa el servidor.");
+    return;
+  }
 
-$(document).on("change", ".producto", function () {
-  const producto = $(this).val();
-  const precio = preciosProductos[producto] || 0;
-  $(this).closest("tr").find(".precio").val(precio.toFixed(2));
-  actualizarTotales();
-});
+  // PRODUCTOS A LISTA
+  function actualizarSelects() {
+    document.querySelectorAll("select.producto").forEach(select => {
+      select.innerHTML = '<option value="">Seleccione un producto</option>';
+      productos.forEach(p => {
+        select.innerHTML += `<option value="${p.idProducto}" data-precio="${p.precio}">${p.nombre}</option>`;
+      });
+    });
+  }
 
-$(document).on("input", ".cantidad", function () {
-  actualizarTotales();
-});
-
-$("#agregarFila").on("click", function () {
-  const nuevaFila = `
-    <tr>
+  // AGREGAR FILA
+  btnAgregar.addEventListener("click", () => {
+    const fila = document.createElement("tr");
+    fila.innerHTML = `
       <td>
-        <select class="form-select producto">
-          <option value="">Seleccione un producto</option>
-          <option value="Shampoo Sólido">Shampoo Sólido</option>
-          <option value="Acondicionador">Acondicionador</option>
-          <option value="Jabón Natural">Jabón Natural</option>
-          <option value="Crema Corporal">Crema Corporal</option>
-          <option value="Perfume Vegano">Perfume Vegano</option>
-        </select>
+        <select class="form-select producto"></select>
       </td>
       <td><input type="number" class="form-control cantidad" value="1" min="1"></td>
       <td><input type="number" class="form-control precio" value="0" readonly></td>
       <td class="total">0.00</td>
       <td><button type="button" class="btn btn-danger btn-sm eliminar">X</button></td>
-    </tr>`;
-  $("#tablaPedido tbody").append(nuevaFila);
-  inicializarSelect2();
-});
+    `;
+    tablaPedido.appendChild(fila);
+    actualizarSelects();
+  });
 
-$(document).on("click", ".eliminar", function () {
-  $(this).closest("tr").remove();
-  actualizarTotales();
-});
+  // FUNCION PARA ACTUALIZAR SOLO EL SELECT NUEVO
+  function actualizarSelect(fila) {
+    const select = fila.querySelector("select.producto");
+    select.innerHTML = '<option value="">Seleccione un producto</option>';
+    productos.forEach(p => {
+      select.innerHTML += `<option value="${p.idProducto}" data-precio="${p.precio}">${p.nombre}</option>`;
+    });
+  }
 
-$("#pedido").on("click", async function (e) {
-  e.preventDefault();
+  // Añadimos una fila inicial si no hay
+  if (tablaPedido.children.length === 0) btnAgregar.click();
 
-  let items = [];
-  $("#tablaPedido tbody tr").each(function () {
-    const producto = $(this).find(".producto").val();
-    const cantidad = parseInt($(this).find(".cantidad").val()) || 0;
-    const precio = parseFloat($(this).find(".precio").val()) || 0;
-    if (producto && cantidad > 0) {
-      items.push({
-        nombreProducto: producto,
-        cantidad: cantidad,
-        precioUnitario: precio
-      });
+  // TABLA - eventos
+  tablaPedido.addEventListener("input", e => {
+    if (e.target.classList.contains("cantidad")) {
+      recalcularFila(e.target.closest("tr"));
     }
   });
 
-  if (items.length === 0) {
-    alert("⚠️ No hay productos en el pedido");
-    return;
+  tablaPedido.addEventListener("change", e => {
+    if (e.target.classList.contains("producto")) {
+      const option = e.target.selectedOptions[0];
+      const precio = parseFloat(option.getAttribute("data-precio")) || 0;
+      const fila = e.target.closest("tr");
+      fila.querySelector(".precio").value = precio.toFixed(2);
+      recalcularFila(fila);
+    }
+  });
+
+  tablaPedido.addEventListener("click", e => {
+    if (e.target.classList.contains("eliminar")) {
+      e.target.closest("tr").remove();
+      recalcularTotalGeneral();
+    }
+  });
+
+  // CALCULOS
+  function recalcularFila(fila) {
+    const cantidad = parseInt(fila.querySelector(".cantidad").value) || 0;
+    const precio = parseFloat(fila.querySelector(".precio").value) || 0;
+    const total = cantidad * precio;
+    fila.querySelector(".total").textContent = total.toFixed(2);
+    recalcularTotalGeneral();
   }
 
-  // Crear el objeto pedido con la estructura correcta
-  const pedido = {
-    pedido: items
-  };
+  function recalcularTotalGeneral() {
+    let total = 0;
+    document.querySelectorAll("#tablaPedido tbody tr .total").forEach(td => {
+      total += parseFloat(td.textContent) || 0;
+    });
+    totalGeneral.textContent = total.toFixed(2);
+  }
 
-  try {
-    const response = await fetch("api/pedido", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(pedido),
+  // VISTA PREVIA
+  btnEnviar.addEventListener("click", () => {
+    const filas = document.querySelectorAll("#tablaPedido tbody tr");
+    detallesTemporales = [];
+    let total = 0;
+    tablaConfirmacion.innerHTML = "";
+
+    filas.forEach(fila => {
+      const idProducto = parseInt(fila.querySelector(".producto").value);
+      const cantidad = parseInt(fila.querySelector(".cantidad").value);
+      const precio = parseFloat(fila.querySelector(".precio").value);
+      const productoObj = productos.find(p => p.idProducto === idProducto);
+
+      if (idProducto && cantidad > 0 && productoObj) {
+        const subtotal = cantidad * precio;
+        total += subtotal;
+
+        detallesTemporales.push({ idProducto, cantidad, precio });
+
+        tablaConfirmacion.innerHTML += `
+          <tr>
+            <td>${productoObj.nombre}</td>
+            <td>${cantidad}</td>
+            <td>${precio.toFixed(2)}</td>
+            <td>${subtotal.toFixed(2)}</td>
+          </tr>`;
+      }
     });
 
-    if (response.ok) {
-      alert("✅ Pedido guardado correctamente en la base de datos");
-      $("#tablaPedido tbody").empty();
-      actualizarTotales();
-    } else {
-      alert("⚠️ Error al guardar el pedido");
-      console.log(await response.text());
+    if (detallesTemporales.length === 0) {
+      alert("⚠️ Debes agregar al menos un producto.");
+      return;
     }
-  } catch (error) {
-    console.error("Error al enviar pedido:", error);
-    alert("❌ Error de conexión con el servidor");
-  }
-});
 
-$(document).ready(function () {
-  inicializarSelect2();
-  actualizarTotales();
+    totalConfirmacion.textContent = total.toFixed(2);
+    new bootstrap.Modal(document.getElementById("confirmarModal")).show();
+  });
+
+  // CONFIRMACION PEDIDO
+  btnConfirmar.addEventListener("click", async () => {
+    const pedido = { idUsuario: parseInt(idUsuario), detalles: detallesTemporales };
+
+    try {
+      const response = await fetch("http://localhost:8080/pedidos/crear", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(pedido),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        alert(`✅ ${data.mensaje}\nNúmero de pedido: ${data.nroPedido}`);
+
+        // Limpiar la tabla de pedido
+        tablaPedido.innerHTML = "";
+        recalcularTotalGeneral();
+        btnAgregar.click();
+        bootstrap.Modal.getInstance(document.getElementById("confirmarModal")).hide();
+
+        // Abrir revendedores.html en nueva pestaña y pasar el nroPedido para que lo muestre/hightlightee
+        if (data.nroPedido) {
+          window.open(`revendedores.html?nroPedido=${data.nroPedido}`, "_blank");
+        }
+      } else {
+        const errorText = await response.text();
+        alert("❌ Error al registrar pedido: " + errorText);
+      }
+    } catch (error) {
+      console.error("Error al enviar pedido:", error);
+      alert("❌ Error de conexión con el servidor.");
+    }
+  });
+
 });
