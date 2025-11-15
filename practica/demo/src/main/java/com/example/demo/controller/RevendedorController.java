@@ -1,16 +1,22 @@
 package com.example.demo.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dao.RevendedorDao;
 import com.example.demo.dao.UsuarioDao;
 import com.example.demo.model.Revendedor;
 import com.example.demo.model.Usuario;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/revendedores")
@@ -30,8 +36,7 @@ public class RevendedorController {
 
     // Crea un revendedor y lo asocia a un usuario
     @PostMapping("/crear/{idUsuario}")
-    public ResponseEntity<?> crearRevendedor(@PathVariable Long idUsuario,
-                                             @RequestBody Revendedor revendedor) {
+    public ResponseEntity<?> crearRevendedor(@PathVariable Long idUsuario,@RequestBody Revendedor revendedor) {
 
         // Busca el usuario por ID
         Usuario usuario = usuarioDao.findById(idUsuario).orElse(null);
@@ -53,7 +58,7 @@ public class RevendedorController {
     // Obtiene el perfil de revendedor de un usuario específico
     @GetMapping("/usuario/{idUsuario}")
     public ResponseEntity<?> getRevendedorPorUsuario(@PathVariable Long idUsuario) {
-        Revendedor revendedor = revendedorDao.findByUsuarioIdUsuario(idUsuario);
+        Revendedor revendedor = revendedorDao.findByUsuario_IdUsuario(idUsuario);
 
         // Si no se encuentra, devuelve 404
         if (revendedor == null) {

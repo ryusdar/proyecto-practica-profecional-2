@@ -1,7 +1,9 @@
 package com.example.demo.model;
 import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,7 +22,7 @@ public class Localidad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_localidad")
-    private Long idLocalidad;
+    private int  idLocalidad;
 
     @Column(name = "nombre")
     private String nombre;
@@ -39,17 +41,17 @@ public class Localidad {
     public Localidad() {
     }
 
-    public Localidad(Long idLocalidad, String nombre, Provincia provincia) {
+    public Localidad(int idLocalidad, String nombre, Provincia provincia) {
         this.idLocalidad = idLocalidad;
         this.nombre = nombre;
         this.provincia = provincia;
     }
 
-    public Long getIdLocalidad() {
+    public int  getIdLocalidad() {
         return idLocalidad;
     }
 
-    public void setIdLocalidad(Long idLocalidad) {
+    public void setIdLocalidad(int  idLocalidad) {
         this.idLocalidad = idLocalidad;
     }
 
