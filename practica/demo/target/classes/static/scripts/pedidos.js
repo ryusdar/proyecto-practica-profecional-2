@@ -103,43 +103,43 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // VISTA PREVIA
-  btnEnviar.addEventListener("click", () => {
-    const filas = document.querySelectorAll("#tablaPedido tbody tr");
-    detallesTemporales = [];
-    let total = 0;
-    tablaConfirmacion.innerHTML = "";
+btnEnviar.addEventListener("click", () => {
+  const filas = document.querySelectorAll("#tablaPedido tbody tr");
+  detallesTemporales = [];
+  let total = 0;
+  tablaConfirmacion.innerHTML = "";
 
-    filas.forEach(fila => {
-      const idProducto = parseInt(fila.querySelector(".producto").value);
-      const cantidad = parseInt(fila.querySelector(".cantidad").value);
-      const precio = parseFloat(fila.querySelector(".precio").value);
-      const productoObj = productos.find(p => p.idProducto === idProducto);
+  filas.forEach(fila => {
+    const idProducto = parseInt(fila.querySelector(".producto").value);
+    const cantidad = parseInt(fila.querySelector(".cantidad").value);
+    const precio = parseFloat(fila.querySelector(".precio").value);
+    const productoObj = productos.find(p => p.idProducto === idProducto);
 
-      if (idProducto && cantidad > 0 && productoObj) {
-        const subtotal = cantidad * precio;
-        total += subtotal;
+    if (idProducto && cantidad > 0 && productoObj) {
+      const subtotal = cantidad * precio;
+      total += subtotal;
 
-        detallesTemporales.push({ idProducto, cantidad, precio });
+      detallesTemporales.push({ idProducto, cantidad, precio });
 
-        tablaConfirmacion.innerHTML += `
-          <tr>
-            <td>${productoObj.nombre}</td>
-            <td>${cantidad}</td>
-            <td>${precio.toFixed(2)}</td>
-            <td>${subtotal.toFixed(2)}</td>
-          </tr>`;
-      }
-    });
-
-    if (detallesTemporales.length === 0) {
-      alert("⚠️ Debes agregar al menos un producto.");
-      return;
+      tablaConfirmacion.innerHTML += `
+        <tr>
+          <td>${productoObj.nombre}</td>
+          <td>${cantidad}</td>
+          <td>${productoObj.stock}</td>
+          <td>${precio.toFixed(2)}</td>
+          <td>${subtotal.toFixed(2)}</td>
+        </tr>`;
     }
-
-    totalConfirmacion.textContent = total.toFixed(2);
-    new bootstrap.Modal(document.getElementById("confirmarModal")).show();
   });
 
+  if (detallesTemporales.length === 0) {
+    alert("⚠️ Debes agregar al menos un producto.");
+    return;
+  }
+
+  totalConfirmacion.textContent = total.toFixed(2);
+  new bootstrap.Modal(document.getElementById("confirmarModal")).show();
+});
   // CONFIRMACION PEDIDO
   btnConfirmar.addEventListener("click", async () => {
     const pedido = { idUsuario: parseInt(idUsuario), detalles: detallesTemporales };
