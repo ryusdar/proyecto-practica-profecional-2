@@ -4,42 +4,67 @@ const STOCK_OBJETIVO = 10;
 
 let productos = [];
 
-// ==================== STOCK ====================
+// ==================== EVENT LISTENER PRINCIPAL ====================
 
 document.addEventListener("DOMContentLoaded", async () => {
+  // 1. Carga el contenido de la primera pestaña activa (Stock)
   await cargarProductosDesdeBD();
+
+  // 2. Asigna listeners de la pestaña Stock
   document.getElementById("filterInsumo").addEventListener("input", filtrarProductos);
   document.getElementById("filterCantidadMin").addEventListener("input", filtrarProductos);
   document.getElementById("filterCantidadMax").addEventListener("input", filtrarProductos);
   document.getElementById("pedidoAuto").addEventListener("click", generarPedidoAutomatico);
 
-  // Usuarios
-  if (document.getElementById("usuarios-tab")) {
-    await cargarUsuarios();
+  // 3. Asigna listeners para las OTRAS pestañas (para que carguen su contenido AL HACER CLIC)
+  const usuariosTab = document.getElementById("usuarios-tab");
+  if (usuariosTab) {
+    // Usamos 'shown.bs.tab' para que solo cargue cuando la pestaña se muestra
+    usuariosTab.addEventListener('shown.bs.tab', cargarUsuarios);
     document.getElementById("btnNuevoUsuario")?.addEventListener("click", () => abrirModalUsuario());
     document.getElementById("formUsuario")?.addEventListener("submit", guardarUsuario);
   }
+
+  const facturaTab = document.getElementById("factura-tab");
+  if (facturaTab) {
+    facturaTab.addEventListener('shown.bs.tab', cargarBoletasGeneradas);
+  }
 });
+
+
+// ==================== TAB 1: STOCK ====================
 
 // 🟢 Cargar productos desde la BD
 async function cargarProductosDesdeBD() {
-  const resp = await fetch(`${API_BASE}/productos`);
-  const data = await resp.json();
+  try {
+    const resp = await fetch(`${API_BASE}/productos`);
+    if (!resp.ok) throw new Error("Error al cargar productos");
+    const data = await resp.json();
 
-  productos = data.map(p => ({
-    id: p.idProducto,
-    nombre: p.nombre,
-    precio: p.precio?.parsedValue ?? 0,
-    stock: Number(p.stock),
-    categoria: p.idCategoria
-  }));
+    productos = data.map(p => ({
+      id: p.idProducto,
+      nombre: p.nombre,
+      precio: p.precio?.parsedValue ?? 0,
+      stock: Number(p.stock),
+      categoria: p.idCategoria
+    }));
 
-  mostrarProductos(productos);
+    mostrarProductos(productos);
+  } catch (error) {
+    console.error("Error en cargarProductosDesdeBD:", error);
+    // Asegurarse de que el tbody existe antes de escribir en él
+    const tbody = document.querySelector("#tablaStock tbody");
+    if (tbody) {
+      tbody.innerHTML = `<tr><td colspan="2" class="text-danger">Error al cargar productos</td></tr>`;
+    }
+  }
 }
 
 // 🧾 Mostrar productos
 function mostrarProductos(lista) {
   const tbody = document.querySelector("#tablaStock tbody");
+
+  // Esta línea era la que fallaba (tbody era null)
   tbody.innerHTML = "";
 
   if (lista.length === 0) {
@@ -92,10 +117,10 @@ async function generarPedidoAutomatico() {
       <tr>
         <td>${p.nombre}</td>
         <td>${p.stock}</td>
-        <td><input type="number" class="form-control text-center cantidad-pedido" 
-                   data-id="${p.id}" 
-                   data-nombre="${p.nombre}" 
-                   min="1" 
+        <td><input type="number" class="form-control text-center cantidad-pedido"
+                   data-id="${p.id}"
+                   data-nombre="${p.nombre}"
+                   min="1"
                    placeholder="Ej: 10" /></td>
       </tr>`;
     tbody.insertAdjacentHTML("beforeend", fila);
@@ -122,25 +147,30 @@ async function confirmarPedido(bajos) {
     return;
   }
 
-  for (const prod of seleccion) {
-    const nuevoStock = prod.stock + prod.cantidad;
-    await fetch(`${API_BASE}/productos/${prod.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        idProducto: prod.id,
-        nombre: prod.nombre,
-        precio: prod.precio,
-        stock: nuevoStock,
-        idCategoria: prod.categoria
-      })
-    });
-  }
+  try {
+    for (const prod of seleccion) {
+      const nuevoStock = prod.stock + prod.cantidad;
+      await fetch(`${API_BASE}/productos/${prod.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          idProducto: prod.id,
+          nombre: prod.nombre,
+          precio: prod.precio,
+          stock: nuevoStock,
+          idCategoria: prod.categoria
+        })
+      });
+    }
 
-  mostrarToast("✅ El stock fue actualizado correctamente.", "success");
-  generarPDFPedido(seleccion);
-  document.getElementById("pedidoEditable").style.display = "none";
-  await cargarProductosDesdeBD();
+    mostrarToast("✅ El stock fue actualizado correctamente.", "success");
+    generarPDFPedido(seleccion);
+    document.getElementById("pedidoEditable").style.display = "none";
+    await cargarProductosDesdeBD();
+  } catch (error) {
+    console.error("Error al confirmar pedido:", error);
+    mostrarToast("Error al actualizar el stock.", "error");
+  }
 }
 
 // 🧾 Generar PDF
@@ -203,41 +233,177 @@ function generarPDFPedido(seleccion) {
   doc.save(`Pedido_Automatico_${fecha.replace(/\//g, "-")}.pdf`);
 }
 
-// ==================== USUARIOS ====================
+// ==================== TAB 2: BOLETAS (FACTURACIÓN) ====================
 
-async function cargarUsuarios() {
-  const resp = await fetch(`${API_BASE}/usuarios`);
-  const data = await resp.json();
-  const usuarios = Object.values(data);
-  const tbody = document.querySelector("#tablaUsuarios tbody");
-  tbody.innerHTML = "";
+/**
+ * Carga la lista de boletas generadas desde la API y las muestra en la tabla.
+ */
+async function cargarBoletasGeneradas() {
+  const tbody = document.querySelector("#tablaBoletasGeneradas tbody");
+  tbody.innerHTML = '<tr><td colspan="7">Cargando...</td></tr>';
 
-  if (usuarios.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="8">No hay usuarios registrados</td></tr>`;
-    return;
+  try {
+    const resp = await fetch(`${API_BASE}/boletas`);
+    if (!resp.ok) throw new Error("Error al cargar boletas");
+    const boletas = await resp.json();
+
+    tbody.innerHTML = ""; // Limpiar tabla
+
+    if (boletas.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7">No hay boletas generadas.</td></tr>';
+      return;
+    }
+
+    // Ordenar de más nueva a más vieja (por idBoleta)
+    boletas.sort((a, b) => b.idBoleta - a.idBoleta);
+
+    boletas.forEach(boleta => {
+      // Manejo defensivo por si pedido o usuario son nulos
+      const cliente = boleta.pedido?.usuario;
+      const nombreCliente = cliente ? `${cliente.nombre} ${cliente.apellido ?? ''}` : "N/A";
+      const nroPedido = boleta.pedido?.nroPedido ?? 0;
+
+      const fila = `
+        <tr>
+          <td>${boleta.idBoleta}</td>
+          <td>${nroPedido}</td>
+          <td>${nombreCliente}</td>
+          <td>${boleta.fechaEmision}</td>
+          <td>$${boleta.total.toFixed(2)}</td>
+          <td>${boleta.estado}</td>
+          <td>
+            <button class="btn btn-sm btn-info" onclick="verDetalleBoleta(${nroPedido})">
+              Ver 👁️
+            </button>
+          </td>
+        </tr>
+      `;
+      tbody.insertAdjacentHTML("beforeend", fila);
+    });
+
+  } catch (error) {
+    console.error("Error en cargarBoletasGeneradas:", error);
+    tbody.innerHTML = `<tr><td colspan="7">Error al cargar la información.</td></tr>`;
+  }
+}
+
+/**
+ * Busca los detalles completos de una boleta/pedido y los muestra en un modal.
+ * @param {number} nroPedido - El número de pedido para buscar la boleta.
+ */
+async function verDetalleBoleta(nroPedido) {
+  if (nroPedido === 0) {
+      mostrarToast("Error: No se puede mostrar el detalle (Pedido no vinculado)", "error");
+      return;
   }
 
-  usuarios.forEach(u => {
-    const rolNombre =
-      u.rol === 1 ? "Administrador" :
-      u.rol === 2 ? "Revendedor" : "Usuario";
+  const modalBody = document.getElementById("cuerpoModalBoleta");
+  modalBody.innerHTML = "<p>Cargando detalles...</p>";
 
-    const fila = `
-      <tr>
-        <td>${u.idUsuario}</td>
-        <td>${u.nombre} ${u.apellido ?? ""}</td>
-        <td>${u.email}</td>
-        <td>${u.telefono ?? "-"}</td>
-        <td>${rolNombre}</td>
-        <td>${u.fechaAlta ?? "-"}</td>
-        <td>${u.activo ? "Activo ✅" : "Inactivo ❌"}</td>
-        <td>
-          <button class="btn btn-sm btn-primary me-1" onclick="editarUsuario(${u.idUsuario})">✏️</button>
-          <button class="btn btn-sm btn-danger" onclick="eliminarUsuario(${u.idUsuario})">🗑️</button>
-        </td>
-      </tr>`;
-    tbody.insertAdjacentHTML("beforeend", fila);
-  });
+  const modal = new bootstrap.Modal(document.getElementById("modalBoletaDetalle"));
+  modal.show();
+
+  try {
+    const resp = await fetch(`${API_BASE}/boletas/pedido/${nroPedido}`);
+    if (!resp.ok) throw new Error("Boleta no encontrada");
+
+    const data = await resp.json();
+    const { boleta, pedido, usuario, detalles } = data;
+
+    // Formatear detalles en una tabla
+    let detallesHtml = '<table class="table table-sm table-bordered"><thead><tr><th>Producto</th><th>Cant.</th><th>P. Unit.</th><th>Subtotal</th></tr></thead><tbody>';
+    detalles.forEach(d => {
+      detallesHtml += `
+        <tr>
+          <td>${d.producto.nombre}</td>
+          <td>${d.cantidad}</td>
+          <td>$${d.precioUnitario.toFixed(2)}</td>
+          <td>$${(d.cantidad * d.precioUnitario).toFixed(2)}</td>
+        </tr>
+      `;
+    });
+    detallesHtml += '</tbody></table>';
+
+    // Construir HTML del modal
+    modalBody.innerHTML = `
+      <div class="row">
+        <div class="col-md-6">
+          <h5>Datos del Cliente</h5>
+          <p><strong>Nombre:</strong> ${usuario.nombre} ${usuario.apellido ?? ''}</p>
+          <p><strong>Email:</strong> ${usuario.email}</p>
+          <p><strong>Teléfono:</strong> ${usuario.telefono ?? '-'}</p>
+        </div>
+        <div class="col-md-6">
+          <h5>Datos de la Boleta</h5>
+          <p><strong>Nro. Boleta:</strong> ${boleta.idBoleta}</p>
+          <p><strong>Nro. Pedido:</strong> ${pedido.nroPedido}</p>
+          <p><strong>Fecha Emisión:</strong> ${boleta.fechaEmision}</p>
+          <p><strong>Estado:</strong> ${boleta.estado}</p>
+        </div>
+      </div>
+
+      <hr>
+      <h5>Detalle del Pedido</h5>
+      ${detallesHtml}
+
+      <hr>
+      <div class="text-end">
+        <h5 class="mb-1">Subtotal: $${boleta.subtotal.toFixed(2)}</h5>
+        <h5 class="mb-1">IVA (19%): $${boleta.iva.toFixed(2)}</h5>
+        <h4 class="mb-0"><strong>Total: $${boleta.total.toFixed(2)}</strong></h4>
+      </div>
+    `;
+
+  } catch (error) {
+    console.error("Error en verDetalleBoleta:", error);
+    modalBody.innerHTML = `<p class="text-danger">Error al cargar los detalles: ${error.message}</p>`;
+  }
+}
+
+// ==================== TAB 3: USUARIOS ====================
+
+async function cargarUsuarios() {
+  const tbody = document.querySelector("#tablaUsuarios tbody");
+  tbody.innerHTML = '<tr><td colspan="8">Cargando...</td></tr>';
+
+  try {
+    const resp = await fetch(`${API_BASE}/usuarios`);
+    if (!resp.ok) throw new Error("Error al cargar usuarios");
+    const data = await resp.json();
+    const usuarios = Object.values(data);
+
+    tbody.innerHTML = ""; // Limpiar tabla
+
+    if (usuarios.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="8">No hay usuarios registrados</td></tr>`;
+      return;
+    }
+
+    usuarios.forEach(u => {
+      const rolNombre =
+        u.rol === 1 ? "Administrador" :
+        u.rol === 2 ? "Revendedor" : "Usuario";
+
+      const fila = `
+        <tr>
+          <td>${u.idUsuario}</td>
+          <td>${u.nombre} ${u.apellido ?? ""}</td>
+          <td>${u.email}</td>
+          <td>${u.telefono ?? "-"}</td>
+          <td>${rolNombre}</td>
+          <td>${u.fechaAlta ?? "-"}</td>
+          <td>${u.activo ? "Activo ✅" : "Inactivo ❌"}</td>
+          <td>
+            <button class="btn btn-sm btn-primary me-1" onclick="editarUsuario(${u.idUsuario})">✏️</button>
+            <button class="btn btn-sm btn-danger" onclick="eliminarUsuario(${u.idUsuario})">🗑️</button>
+          </td>
+        </tr>`;
+      tbody.insertAdjacentHTML("beforeend", fila);
+    });
+  } catch (error) {
+    console.error("Error en cargarUsuarios:", error);
+    tbody.innerHTML = `<tr><td colspan="8" class="text-danger">Error al cargar usuarios</td></tr>`;
+  }
 }
 
 // Abrir modal
@@ -261,9 +427,15 @@ function abrirModalUsuario(usuario = null) {
 
 // Editar usuario existente
 async function editarUsuario(id) {
-  const resp = await fetch(`${API_BASE}/usuarios/${id}`);
-  const usuario = await resp.json();
-  abrirModalUsuario(usuario);
+  try {
+    const resp = await fetch(`${API_BASE}/usuarios/${id}`);
+    if (!resp.ok) throw new Error("Usuario no encontrado");
+    const usuario = await resp.json();
+    abrirModalUsuario(usuario);
+  } catch (error) {
+    console.error("Error al editar usuario:", error);
+    mostrarToast("Error al cargar datos del usuario.", "error");
+  }
 }
 
 // Guardar usuario
@@ -282,26 +454,44 @@ async function guardarUsuario(event) {
   };
 
   const metodo = id ? "PUT" : "POST";
-  const url = id ? `${API_BASE}/usuarios/${id}` : `${API_BASE}/usuarios`;
+  const url = id ? `${API_BASE}/usuarios/${id}` : `${API_BASE}/usuarios/registrar`; // Asumiendo /registrar para nuevos
 
-  await fetch(url, {
-    method: metodo,
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(usuario)
-  });
+  try {
+    const resp = await fetch(url, {
+      method: metodo,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(usuario)
+    });
 
-  mostrarToast("✅ Usuario guardado correctamente.", "success");
-  bootstrap.Modal.getInstance(document.getElementById("modalUsuario")).hide();
-  await cargarUsuarios();
+    if (!resp.ok) throw new Error("Error al guardar");
+
+    mostrarToast("✅ Usuario guardado correctamente.", "success");
+    bootstrap.Modal.getInstance(document.getElementById("modalUsuario")).hide();
+    await cargarUsuarios(); // Recargar la lista de usuarios
+  } catch (error) {
+    console.error("Error al guardar usuario:", error);
+    mostrarToast("Error al guardar el usuario.", "error");
+  }
 }
 
 // Eliminar usuario
 async function eliminarUsuario(id) {
   if (!confirm("¿Seguro que desea eliminar este usuario?")) return;
-  await fetch(`${API_BASE}/usuarios/${id}`, { method: "DELETE" });
-  mostrarToast("🗑️ Usuario eliminado correctamente.", "warning");
-  await cargarUsuarios();
+
+  try {
+    const resp = await fetch(`${API_BASE}/usuarios/${id}`, { method: "DELETE" });
+    if (!resp.ok) throw new Error("Error al eliminar");
+
+    mostrarToast("🗑️ Usuario eliminado correctamente.", "warning");
+    await cargarUsuarios(); // Recargar la lista
+  } catch (error) {
+    console.error("Error al eliminar usuario:", error);
+    mostrarToast("Error al eliminar el usuario.", "error");
+  }
 }
+
+
+// ==================== UTILIDADES ====================
 
 // ========== Toast de Bootstrap ==========
 function mostrarToast(mensaje, tipo = "info") {
@@ -327,34 +517,3 @@ function mostrarToast(mensaje, tipo = "info") {
   toastMessage.textContent = mensaje;
   new bootstrap.Toast(toastEl, { delay: 3000 }).show();
 }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    // Cargar usuario desde localStorage
-    const usuario = JSON.parse(localStorage.getItem("usuario"));
-
-    const userButton = document.getElementById("userMenuButton");
-    const nombreMenu = document.getElementById("nombreUsuarioMenu");
-
-    if (usuario) {
-      // Mostrar inicial (primera letra del nombre)
-      const inicial = usuario.nombre ? usuario.nombre.charAt(0).toUpperCase() : "U";
-      userButton.textContent = inicial;
-
-      // Mostrar nombre completo en el menú
-      nombreMenu.textContent = `${usuario.nombre} ${usuario.apellido ?? ""}`;
-    } else {
-      userButton.textContent = "?";
-      nombreMenu.textContent = "Invitado";
-    }
-
-    // Cerrar sesión
-    document.getElementById("logoutBtn").addEventListener("click", (e) => {
-      e.preventDefault();
-      localStorage.removeItem("usuario");
-      mostrarToast("Sesión cerrada correctamente", "success");
-
-      setTimeout(() => {
-        window.location.href = "../index.html";
-      }, 1000);
-    });
-  });

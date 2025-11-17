@@ -2,6 +2,7 @@ package com.example.demo.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
 import com.example.demo.model.Revendedor;
 
 @Repository
@@ -10,6 +11,6 @@ public interface RevendedorDao extends JpaRepository<Revendedor, Long> {
     /**
      * Busca un Revendedor basado en el ID del Usuario asociado.
      */
-    Revendedor findByUsuarioIdUsuario(Long idUsuario);
+    Revendedor findByUsuario_IdUsuario(Long idUsuario);
 
 }

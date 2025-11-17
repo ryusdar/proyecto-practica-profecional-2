@@ -1,8 +1,17 @@
 package com.example.demo.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "pais")
@@ -22,16 +31,16 @@ public class Pais {
 
     public Pais() {}
 
-    public Pais(Long idPais, String nombre) {
+    public Pais(long  idPais, String nombre) {
         this.idPais = idPais;
         this.nombre = nombre;
     }
 
-    public Long getIdPais() {
+    public long  getIdPais() {
         return idPais;
     }
 
-    public void setIdPais(Long idPais) {
+    public void setIdPais(long  idPais) {
         this.idPais = idPais;
     }
 
