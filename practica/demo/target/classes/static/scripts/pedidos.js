@@ -46,17 +46,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       <td><button type="button" class="btn btn-danger btn-sm eliminar">X</button></td>
     `;
     tablaPedido.appendChild(fila);
-    actualizarSelects();
+    actualizarSelect(fila);
   });
 
   // FUNCION PARA ACTUALIZAR SOLO EL SELECT NUEVO
   function actualizarSelect(fila) {
-    const select = fila.querySelector("select.producto");
-    select.innerHTML = '<option value="">Seleccione un producto</option>';
-    productos.forEach(p => {
-      select.innerHTML += `<option value="${p.idProducto}" data-precio="${p.precio}">${p.nombre}</option>`;
-    });
-  }
+  const select = fila.querySelector("select.producto");
+  select.innerHTML = '<option value="">Seleccione un producto</option>';
+  productos.forEach(p => {
+    select.innerHTML += `<option value="${p.idProducto}" data-precio="${p.precio}">${p.nombre}</option>`;
+  });
+}
 
   // Añadimos una fila inicial si no hay
   if (tablaPedido.children.length === 0) btnAgregar.click();
