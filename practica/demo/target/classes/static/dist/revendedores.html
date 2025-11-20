@@ -37,6 +37,22 @@
     </style>
 </head>
 <body>
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+    <div class="dropdown">
+        <button class="btn btn-light rounded-circle d-flex align-items-center justify-content-center"
+                id="userMenuButton" data-bs-toggle="dropdown" aria-expanded="false"
+                style="width: 45px; height: 45px; font-weight: bold;">
+            U
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end text-center" aria-labelledby="userMenuButton">
+            <li><span class="dropdown-item-text fw-bold" id="nombreUsuarioMenu">Usuario</span></li>
+            <li>
+                <hr class="dropdown-divider" />
+            </li>
+            <li><a class="dropdown-item text-danger fw-bold" href="#" id="logoutBtn">Cerrar sesión</a></li>
+        </ul>
+    </div>
+</div>
 <header>
     <h1 class="site-heading text-center text-faded d-none d-lg-block">
         <span class="site-heading-upper text-primary mb-3">Revendedores</span>
