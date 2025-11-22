@@ -2,44 +2,56 @@ document.addEventListener("DOMContentLoaded", async () => {
     const tablaPedidosBody = document.querySelector("#tablaPedidos tbody");
 
     async function cargarPedidos() {
+        tablaPedidosBody.innerHTML = ""; // limpiar tabla
+
         try {
+            // 1) Traemos todos los pedidos del usuario
             const resp = await fetch(`http://localhost:8080/pedidos/usuario/1`);
-            
-            if (!resp.ok) {
-                throw new Error("Error cargando los pedidos.");
-            }
+            const pedidos = await resp.json();
 
-            const text = await resp.text();
-            console.log("Respuesta del servidor:", text);  // Muestra la respuesta cruda
-
-            const pedidos = JSON.parse(text);
-
-            if (pedidos.length === 0) {
-                tablaPedidosBody.innerHTML = `<tr><td colspan="3">No tienes pedidos registrados.</td></tr>`;
+            if (!Array.isArray(pedidos) || pedidos.length === 0) {
+                tablaPedidosBody.innerHTML = `
+                    <tr><td colspan="3">No tienes pedidos registrados.</td></tr>
+                `;
                 return;
             }
 
-            // Filtrar la respuesta para obtener solo los campos necesarios
-            const pedidosFiltrados = pedidos.map(pedido => ({
-                nroPedido: pedido.nroPedido,
-                fecha: pedido.fecha,
-                total: pedido.boleta ? pedido.boleta.total : 0.0 // Asumiendo que 'boleta' contiene el 'total'
-            }));
+            // 2) Recorremos los pedidos y buscamos su boleta para obtener el total
+            for (const pedido of pedidos) {
+                const nroPedido = pedido.nroPedido;
+                let totalBoleta = 0;
 
-            // Mostrar los pedidos
-            pedidosFiltrados.forEach(pedido => {
+                try {
+                    const respBoleta = await fetch(`http://localhost:8080/boletas/pedido/${nroPedido}`);
+
+                    if (respBoleta.ok) {
+                        const dataBoleta = await respBoleta.json();
+                        totalBoleta = dataBoleta.boleta.total ?? 0;
+                    } else {
+                        console.warn(`No se encontró boleta para pedido ${nroPedido}`);
+                    }
+
+                } catch (error) {
+                    console.error("Error trayendo boleta:", error);
+                }
+
+                // 3) Insertamos fila en la tabla
                 const fila = `
                     <tr>
-                        <td>${pedido.nroPedido}</td>
-                        <td>${pedido.fecha}</td>
-                        <td>${pedido.total}</td>
+                        <td>${nroPedido}</td>
+                        <td>${pedido.fecha ?? "Sin fecha"}</td>
+                        <td>$${totalBoleta.toFixed(2)}</td>
                     </tr>
                 `;
+
                 tablaPedidosBody.innerHTML += fila;
-            });
+            }
 
         } catch (err) {
-            console.error("Error cargando los pedidos:", err);
+            console.error("Error cargando pedidos:", err);
+            tablaPedidosBody.innerHTML = `
+                <tr><td colspan="3">Error cargando los pedidos.</td></tr>
+            `;
         }
     }
 

@@ -75,4 +75,6 @@ public class Pedido {
     public void setDetalles(List<DetallePedido> detalles) {
         this.detalles = detalles;
     }
+
+   
 }

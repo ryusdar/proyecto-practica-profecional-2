@@ -10,4 +10,6 @@ import com.example.demo.model.Pedido;
 @Repository
 public interface PedidoDao extends JpaRepository<Pedido, Long> {
     List<Pedido> findByUsuario_IdUsuario(Long idUsuario);
+
+    Pedido findByNroPedido(Long nroPedido);
 }
